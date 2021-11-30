@@ -29,7 +29,11 @@
       <option name="presentableId" value="Default" />
       <updated>1638272284338</updated>
       <workItem from="1638272285428" duration="5000" />
+      <workItem from="1638272602215" duration="123000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
