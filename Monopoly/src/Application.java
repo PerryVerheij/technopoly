@@ -13,10 +13,10 @@ public class Application implements Runnable {
 
     public void run() {
         SaxionApp.setBackgroundColor(Color.black);
-        drawmoneyplayer();
+        drawMoneyPlayer();
     }
-    public void drawmoneyplayer(){
-        for (int n = 0;n<4;n++) {
+    public void drawMoneyPlayer() {
+        for (int n = 0; n < 4; n++) {
             SaxionApp.setFill(Color.darkGray);
             SaxionApp.setBorderColor(Color.gray);
             SaxionApp.drawRectangle(60 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 10, (SaxionApp.getWidth() - 180) / 4 - 50, 200);
@@ -26,12 +26,23 @@ public class Application implements Runnable {
             SaxionApp.turnBorderOff();
             SaxionApp.setFill(Color.gray);
             SaxionApp.setBorderColor(Color.gray);
-            SaxionApp.drawBorderedText("test",65 + (SaxionApp.getWidth() - 100) / 4 * n,SaxionApp.getHeight() - SaxionApp.getHeight() / 27,20);
+            SaxionApp.drawBorderedText("test", 65 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 27, 20);
             SaxionApp.setFill(Color.black);
-            SaxionApp.drawBorderedText("¤"+"test",85 + (SaxionApp.getWidth() - 100) / 4 * n,SaxionApp.getHeight() - SaxionApp.getHeight() / 11,20);
+            SaxionApp.drawBorderedText("¤" + "test", 85 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 11, 20);
             SaxionApp.turnBorderOn();
         }
         SaxionApp.readChar();
     }
+    public void initializeStreets() {
+        CsvReader reader = new CsvReader("reguliere_straten.csv");
+        reader.skipRow();
+        reader.setSeparator(',');
+        while(reader.loadRow()) {
+            Straat newStreet = new Straat();
+            newStreet.name = reader.getString(0);
+            //TODO: CSV-readers afmaken
+        }
+    }
+
 
 }
