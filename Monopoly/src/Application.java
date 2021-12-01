@@ -4,7 +4,6 @@ import nl.saxion.app.SaxionApp;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 public class Application implements Runnable {
 
