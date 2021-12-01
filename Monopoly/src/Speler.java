@@ -1,5 +1,5 @@
 public class Speler {
-    int playerNumber = 0;
+    int playerID = 0;
     String playerName = "";
     int accountBalance = 0;
 }
