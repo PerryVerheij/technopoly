@@ -41,6 +41,16 @@ public class Application implements Runnable {
         while(reader.loadRow()) {
             Straat newStreet = new Straat();
             newStreet.name = reader.getString(0);
+            newStreet.value = reader.getInt(1);
+            newStreet.group = reader.getInt(2);
+            newStreet.mortgage = reader.getInt(3);
+            newStreet.housePrice = reader.getInt(4);
+            newStreet.undeveloped = reader.getInt(10);
+            newStreet.house1 = reader.getInt(5);
+            newStreet.house2 = reader.getInt(6);
+            newStreet.house3 = reader.getInt(7);
+            newStreet.house4 = reader.getInt(8);
+            newStreet.hotel = reader.getInt(9);
             //TODO: CSV-readers afmaken
         }
     }
