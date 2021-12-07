@@ -10,7 +10,7 @@ public class Application implements Runnable {
     public static void main(String[] args) {
         SaxionApp.start(new Application(), 1000, 700);
     }
-//
+//bezig
     public void run() {
         SaxionApp.setBackgroundColor(Color.black);
         drawMoneyPlayer();
@@ -32,6 +32,7 @@ public class Application implements Runnable {
             SaxionApp.turnBorderOn();
         }
         SaxionApp.readChar();
+
     }
     public void initializeStreets() {
         CsvReader reader = new CsvReader("reguliere_straten.csv");
