@@ -43,22 +43,45 @@ public class Application implements Runnable {
 
     }
     public void initializeStreets() {
-        CsvReader reader = new CsvReader("reguliere_straten.csv");
-        reader.skipRow();
-        reader.setSeparator(',');
-        while(reader.loadRow()) {
+        CsvReader readerstreets = new CsvReader("reguliere_straten.csv");
+        CsvReader readerlocations = new CsvReader("locaties.csv");
+        CsvReader readerstations = new CsvReader("locaties.csv");
+        readerstreets.skipRow();
+        readerlocations.skipRow();
+        readerstations.skipRow();
+        readerstreets.setSeparator(',');
+        readerlocations.setSeparator(',');
+        readerstations.setSeparator(',');
+        while(readerstreets.loadRow()) {
             Straat newStreet = new Straat();
-            newStreet.name = reader.getString(0);
-            newStreet.value = reader.getInt(1);
-            newStreet.group = reader.getInt(2);
-            newStreet.mortgage = reader.getInt(3);
-            newStreet.housePrice = reader.getInt(4);
-            newStreet.undeveloped = reader.getInt(10);
-            newStreet.house1 = reader.getInt(5);
-            newStreet.house2 = reader.getInt(6);
-            newStreet.house3 = reader.getInt(7);
-            newStreet.house4 = reader.getInt(8);
-            newStreet.hotel = reader.getInt(9);
+            newStreet.name = readerstreets.getString(0);
+            newStreet.value = readerstreets.getInt(1);
+            newStreet.group = readerstreets.getInt(2);
+            newStreet.mortgage = readerstreets.getInt(3);
+            newStreet.housePrice = readerstreets.getInt(4);
+            newStreet.undeveloped = readerstreets.getInt(10);
+            newStreet.house1 = readerstreets.getInt(5);
+            newStreet.house2 = readerstreets.getInt(6);
+            newStreet.house3 = readerstreets.getInt(7);
+            newStreet.house4 = readerstreets.getInt(8);
+            newStreet.hotel = readerstreets.getInt(9);
+            streets.add(newStreet);
+        }
+        while(readerstations.loadRow()) {
+            Straat newStreet = new Straat();
+            newStreet.name = readerstations.getString(0);
+            newStreet.value = readerstations.getInt(1);
+            newStreet.group = readerstations.getInt(2);
+            newStreet.mortgage = readerstations.getInt(3);
+            newStreet.undeveloped = readerstations.getInt(4);
+            streets.add(newStreet);
+        }
+        while(readerlocations.loadRow()) {
+            Straat newStreet = new Straat();
+            newStreet.name = readerstations.getString(0);
+            newStreet.value = readerstations.getInt(1);
+            newStreet.group = readerstations.getInt(2);
+            newStreet.mortgage = readerstations.getInt(3);
             streets.add(newStreet);
         }
     }
