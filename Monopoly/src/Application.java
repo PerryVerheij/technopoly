@@ -11,7 +11,15 @@ public class Application implements Runnable {
         SaxionApp.start(new Application(), 1000, 700);
     }
 //bezig
+
+    //global "variables"
+    ArrayList<Straat> streets = new ArrayList<>();
     public void run() {
+        //upon startup
+        initializeStreets();
+
+        //after startup
+
         SaxionApp.setBackgroundColor(Color.black);
         drawMoneyPlayer();
     }
@@ -51,7 +59,7 @@ public class Application implements Runnable {
             newStreet.house3 = reader.getInt(7);
             newStreet.house4 = reader.getInt(8);
             newStreet.hotel = reader.getInt(9);
-            //TODO: CSV-readers afmaken
+            streets.add(newStreet);
         }
     }
 
