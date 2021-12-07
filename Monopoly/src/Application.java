@@ -14,11 +14,16 @@ public class Application implements Runnable {
 
     //global "variables"
     ArrayList<Straat> streets = new ArrayList<>();
+    ArrayList<Straat> players = new ArrayList<>();
     public void run() {
-        //upon startup
+        //pre choose player
         initializeStreets();
 
-        //after startup
+        //choose player
+        SaxionApp.drawBorderedText("Choose the amount of players (2-4)",0,0,23);
+        int inputplayer = SaxionApp.readInt();
+        initializeplayers(inputplayer);
+        //post choose player
 
         SaxionApp.setBackgroundColor(Color.black);
         drawMoneyPlayer();
@@ -45,7 +50,7 @@ public class Application implements Runnable {
     public void initializeStreets() {
         CsvReader readerstreets = new CsvReader("reguliere_straten.csv");
         CsvReader readerlocations = new CsvReader("locaties.csv");
-        CsvReader readerstations = new CsvReader("locaties.csv");
+        CsvReader readerstations = new CsvReader("stations.csv");
         readerstreets.skipRow();
         readerlocations.skipRow();
         readerstations.skipRow();
@@ -78,13 +83,27 @@ public class Application implements Runnable {
         }
         while(readerlocations.loadRow()) {
             Straat newStreet = new Straat();
-            newStreet.name = readerstations.getString(0);
-            newStreet.value = readerstations.getInt(1);
-            newStreet.group = readerstations.getInt(2);
-            newStreet.mortgage = readerstations.getInt(3);
+            newStreet.name = readerlocations.getString(0);
+            newStreet.value = readerlocations.getInt(1);
+            newStreet.group = readerlocations.getInt(2);
+            newStreet.mortgage = readerlocations.getInt(3);
             streets.add(newStreet);
         }
     }
+    public void initializeplayers(int inputplayer){
+        int input = 1;
+        for (int i = 1; i<inputplayer;i++){
 
+        }
+
+    }
+    public void debugmoney(){
+        int input = 1;
+        while(input!=0){
+            input = SaxionApp.readInt();
+
+            drawMoneyPlayer();
+        }
+    }
 
 }
