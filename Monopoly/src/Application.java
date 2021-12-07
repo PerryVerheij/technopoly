@@ -10,7 +10,7 @@ public class Application implements Runnable {
     public static void main(String[] args) {
         SaxionApp.start(new Application(), 1000, 700);
     }
-//bezig
+//
 
     //global "variables"
     ArrayList<Straat> streets = new ArrayList<>();
