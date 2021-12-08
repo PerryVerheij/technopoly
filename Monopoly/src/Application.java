@@ -3,7 +3,6 @@ import nl.saxion.app.SaxionApp;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Application implements Runnable {
 
@@ -15,23 +14,29 @@ public class Application implements Runnable {
     //global "variables"
     ArrayList<Straat> streets = new ArrayList<>();
     ArrayList<Speler> players = new ArrayList<>();
+    boolean endGame = false;
+
     public void run() {
         //pre choose player
         initializeStreets();
 
         //choose player
         SaxionApp.turnBorderOff();
-        SaxionApp.drawBorderedText("Choose the amount of players (2-4)",69,69,23);
-        int inputplayer = SaxionApp.readInt();
-        initializeplayers(inputplayer);
+        SaxionApp.drawBorderedText("Choose the amount of players (2-8)",69,69,23);
+        int inputPlayer = SaxionApp.readInt();
+        initializePlayers(inputPlayer);
         SaxionApp.turnBorderOn();
         //post choose player
-
-        SaxionApp.setBackgroundColor(Color.black);
-        drawMoneyPlayer(inputplayer);
+        while(!endGame) {
+            SaxionApp.setBackgroundColor(Color.black);
+            drawMoneyPlayer(inputPlayer);
+            searchStreet();
+            showMainMenu();
+            checkInputMain();
+        }
     }
-    public void drawMoneyPlayer(int inputplayer) {
-        for (int n = 0; n < inputplayer; n++) {
+    public void drawMoneyPlayer(int inputPlayer) {
+        for (int n = 0; n < inputPlayer; n++) {
             SaxionApp.setFill(Color.darkGray);
             SaxionApp.setBorderColor(Color.gray);
             SaxionApp.drawRectangle(60 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 10, (SaxionApp.getWidth() - 180) / 4 - 50, 200);
@@ -50,28 +55,32 @@ public class Application implements Runnable {
 
     }
     public void initializeStreets() {
-        CsvReader readerstreets = new CsvReader("reguliere_straten.csv");
-        CsvReader readerlocations = new CsvReader("locaties.csv");
-        CsvReader readerstations = new CsvReader("stations.csv");
-        readerstreets.skipRow();
-        readerlocations.skipRow();
-        readerstations.skipRow();
-        readerstreets.setSeparator(',');
-        readerlocations.setSeparator(',');
-        readerstations.setSeparator(',');
-        while(readerstreets.loadRow()) {
+        CsvReader readerStreets = new CsvReader("reguliere_straten.csv");
+        CsvReader readerLocations = new CsvReader("locaties.csv");
+        CsvReader readerStations = new CsvReader("stations.csv");
+        CsvReader readerTaxes = new CsvReader("belasting.csv");
+
+        readerStreets.skipRow();
+        readerLocations.skipRow();
+        readerStations.skipRow();
+        readerTaxes.skipRow();
+        readerStreets.setSeparator(',');
+        readerLocations.setSeparator(',');
+        readerStations.setSeparator(',');
+        readerTaxes.setSeparator(',');
+        while(readerStreets.loadRow()) {
             Straat newStreet = new Straat();
-            newStreet.name = readerstreets.getString(0);
-            newStreet.value = readerstreets.getInt(1);
-            newStreet.group = readerstreets.getInt(2);
-            newStreet.mortgage = readerstreets.getInt(3);
-            newStreet.housePrice = readerstreets.getInt(4);
-            newStreet.undeveloped = readerstreets.getInt(10);
-            newStreet.house1 = readerstreets.getInt(5);
-            newStreet.house2 = readerstreets.getInt(6);
-            newStreet.house3 = readerstreets.getInt(7);
-            newStreet.house4 = readerstreets.getInt(8);
-            newStreet.hotel = readerstreets.getInt(9);
+            newStreet.name = readerStreets.getString(0);
+            newStreet.value = readerStreets.getInt(1);
+            newStreet.group = readerStreets.getInt(2);
+            newStreet.mortgage = readerStreets.getInt(3);
+            newStreet.housePrice = readerStreets.getInt(4);
+            newStreet.undeveloped = readerStreets.getInt(10);
+            newStreet.house1 = readerStreets.getInt(5);
+            newStreet.house2 = readerStreets.getInt(6);
+            newStreet.house3 = readerStreets.getInt(7);
+            newStreet.house4 = readerStreets.getInt(8);
+            newStreet.hotel = readerStreets.getInt(9);
             streets.add(newStreet);
         }
         while(readerStations.loadRow()) {
@@ -99,25 +108,41 @@ public class Application implements Runnable {
             streets.add(newStreet);
         }
     }
-    public void initializeplayers(int inputplayer){
-        for (int i = 1; i<=inputplayer;i++){
-            Speler newplayer = new Speler();
-            newplayer.playerID = i;
+    public void initializePlayers(int inputPlayer){
+        for (int i = 1; i<=inputPlayer;i++){
+            Speler newPlayer = new Speler();
+            newPlayer.playerID = i;
             SaxionApp.removeLastDraw();
             SaxionApp.drawBorderedText("Enter name for player "+i,69,69,29);
-            newplayer.playerName = SaxionApp.readString();
-            players.add(newplayer);
+            newPlayer.playerName = SaxionApp.readString();
+            players.add(newPlayer);
             SaxionApp.clear();
         }
 
     }
-    public void debugmoney(){
-        int input = 1;
-        while(input!=0){
-            input = SaxionApp.readInt();
 
+    public void searchStreet() {
+        SaxionApp.print("Voer de naam van de straat in: ");
+        String userInput = SaxionApp.readString();
 
-        }
     }
 
+    public void showMainMenu() {
+        SaxionApp.printLine("Kies een optie:");
+        SaxionApp.printLine("1. Straten ruilen");
+        SaxionApp.printLine("2. Huisjes/hotels plaatsen");
+        SaxionApp.printLine("3. Beurt beëindigen");
+    }
+
+    public void checkInputMain(){
+        char input = SaxionApp.readChar();
+        switch (input){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+    }
 }
