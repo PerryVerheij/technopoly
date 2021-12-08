@@ -13,4 +13,5 @@ public class Straat {
     int house4 = 0;
     int hotel = 0;
     int owner = 0;
+    boolean buyable = true;
 }

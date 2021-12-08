@@ -74,21 +74,28 @@ public class Application implements Runnable {
             newStreet.hotel = readerstreets.getInt(9);
             streets.add(newStreet);
         }
-        while(readerstations.loadRow()) {
+        while(readerStations.loadRow()) {
             Straat newStreet = new Straat();
-            newStreet.name = readerstations.getString(0);
-            newStreet.value = readerstations.getInt(1);
-            newStreet.group = readerstations.getInt(2);
-            newStreet.mortgage = readerstations.getInt(3);
-            newStreet.undeveloped = readerstations.getInt(4);
+            newStreet.name = readerStations.getString(0);
+            newStreet.value = readerStations.getInt(1);
+            newStreet.group = readerStations.getInt(2);
+            newStreet.mortgage = readerStations.getInt(3);
+            newStreet.undeveloped = readerStations.getInt(4);
             streets.add(newStreet);
         }
-        while(readerlocations.loadRow()) {
+        while(readerLocations.loadRow()) {
             Straat newStreet = new Straat();
-            newStreet.name = readerlocations.getString(0);
-            newStreet.value = readerlocations.getInt(1);
-            newStreet.group = readerlocations.getInt(2);
-            newStreet.mortgage = readerlocations.getInt(3);
+            newStreet.name = readerLocations.getString(0);
+            newStreet.value = readerLocations.getInt(1);
+            newStreet.group = readerLocations.getInt(2);
+            newStreet.mortgage = readerLocations.getInt(3);
+            streets.add(newStreet);
+        }
+        while(readerTaxes.loadRow()) {
+            Straat newStreet = new Straat();
+            newStreet.name = readerTaxes.getString(0);
+            newStreet.undeveloped = readerTaxes.getInt(1);
+            newStreet.buyable = false;
             streets.add(newStreet);
         }
     }
