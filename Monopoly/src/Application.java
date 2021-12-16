@@ -39,6 +39,7 @@ public class Application implements Runnable {
         SaxionApp.turnBorderOn();
         //post choose player
         while(!endGame) {
+            //set variables
             nextbeurt = false;
             //graphics
             SaxionApp.clear();
