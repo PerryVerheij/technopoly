@@ -19,6 +19,7 @@ public class Application implements Runnable {
     Straat selectedStreet = null;
     Speler activePlayer = null;
     int amountOfPlayers=0;
+    boolean nextbeurt=false;
 
     public void run() {
         //pre choose player
@@ -38,17 +39,22 @@ public class Application implements Runnable {
         SaxionApp.turnBorderOn();
         //post choose player
         while(!endGame) {
+            nextbeurt = false;
             //graphics
             SaxionApp.clear();
             drawMoneyPlayer();
             //game
             searchStreet();
             if(selectedStreet.owner == activePlayer.playerID) {
-                showOwnerMenu();
-                checkInputOwner();
+                while(!nextbeurt) {
+                    showOwnerMenu();
+                    checkInputOwner();
+                }
             } else {
-                showPlayerMenu();
-                checkInputPlayer(activePlayer);
+                while(!nextbeurt) {
+                    showPlayerMenu();
+                    checkInputPlayer(activePlayer);
+                }
             }
             activePlayer = players.get(0);
         }
@@ -236,5 +242,6 @@ public class Application implements Runnable {
         }else{
             activePlayer =players.get(0);
         }
+        nextbeurt =true;
     }
 }
