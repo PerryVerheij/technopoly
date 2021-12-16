@@ -18,7 +18,8 @@ public class Application implements Runnable {
     boolean endGame = false;
     Straat selectedStreet = null;
     Speler activePlayer = null;
-    int inputPlayer=0;
+    int amountOfPlayers = 0;
+
     public void run() {
         //pre choose player
         initializeStreets();
@@ -26,13 +27,13 @@ public class Application implements Runnable {
         //choose player
         SaxionApp.turnBorderOff();
         SaxionApp.drawBorderedText("Choose the amount of players (2-4)",175,0,36);
-        inputPlayer = SaxionApp.readInt();
-        while(inputPlayer<2||inputPlayer>4) {
+        amountOfPlayers = SaxionApp.readInt();
+        while(amountOfPlayers<2||amountOfPlayers>4) {
             SaxionApp.removeLastPrint();
             SaxionApp.printLine("ERROR:(2-4)",Color.red);
-            inputPlayer = SaxionApp.readInt();
+            amountOfPlayers = SaxionApp.readInt();
         }
-        initializePlayers(inputPlayer);
+        initializePlayers(amountOfPlayers);
         SaxionApp.turnBorderOn();
         //post choose player
         while(!endGame) {
@@ -51,7 +52,7 @@ public class Application implements Runnable {
         }
     }
     public void drawMoneyPlayer() {
-        for (int n = 0; n < inputPlayer; n++) {
+        for (int n = 0; n < amountOfPlayers; n++) {
             SaxionApp.setFill(Color.darkGray);
             SaxionApp.setBorderColor(Color.gray);
             SaxionApp.drawRectangle(60 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 10, (SaxionApp.getWidth() - 180) / 4 - 50, 200);
