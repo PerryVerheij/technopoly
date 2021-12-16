@@ -2,7 +2,9 @@ import nl.saxion.app.CsvReader;
 import nl.saxion.app.SaxionApp;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Application implements Runnable {
 
@@ -122,9 +124,20 @@ public class Application implements Runnable {
     }
 
     public void searchStreet() {
+        ArrayList<Straat> matchingStreets = new ArrayList<>();
         SaxionApp.print("Voer de naam van de straat in: ");
         String userInput = SaxionApp.readString();
+        for(Straat street : streets) {
+            if(street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+                matchingStreets.add(street);
+            }
+        }
+        for(Straat street : matchingStreets) {
+            SaxionApp.printLine(street.name);
+        }
+        SaxionApp.printLine("Voer je keuze in: ");
 
+        SaxionApp.pause();
     }
 
     public void showMainMenu() {
