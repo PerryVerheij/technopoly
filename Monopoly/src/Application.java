@@ -54,6 +54,7 @@ public class Application implements Runnable {
                 while(!nextbeurt) {
                     showPlayerMenu();
                     checkInputPlayer(activePlayer);
+                    //test
                 }
             }
         }
