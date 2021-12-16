@@ -131,7 +131,20 @@ public class Application implements Runnable {
 
     public void searchStreet() {
         ArrayList<Straat> matchingStreets = new ArrayList<>();
-        SaxionApp.print("Voer de naam van de straat in: ");
+        SaxionApp.setFill(Color.white);
+        SaxionApp.drawBorderedText("Voer de naam van de straat in: ",200,200,38);
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.print("                                                  ");
         String userInput = SaxionApp.readString();
         for(Straat street : streets) {
             if(street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
