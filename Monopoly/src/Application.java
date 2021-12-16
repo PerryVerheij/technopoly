@@ -168,6 +168,15 @@ public class Application implements Runnable {
                 matchingStreets.add(street);
             }
         }
+        while(matchingStreets.size() == 0) {
+            SaxionApp.printLine("Er zijn geen straten gevonden. Probeer het opnieuw.");
+            userInput = SaxionApp.readString();
+            for(Straat street : streets) {
+                if(street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+                    matchingStreets.add(street);
+                }
+            }
+        }
         for(int i=0; i<matchingStreets.size();i++) {
             SaxionApp.print(i+1 + ". ");
             SaxionApp.printLine(matchingStreets.get(i).name);
