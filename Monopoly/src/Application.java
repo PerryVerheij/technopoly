@@ -18,7 +18,7 @@ public class Application implements Runnable {
     ArrayList<Speler> players = new ArrayList<>();
     boolean endGame = false;
     Straat selectedStreet = null;
-
+    int inputPlayer=0;
     public void run() {
         //pre choose player
         initializeStreets();
@@ -26,7 +26,7 @@ public class Application implements Runnable {
         //choose player
         SaxionApp.turnBorderOff();
         SaxionApp.drawBorderedText("Choose the amount of players (2-4)",175,0,36);
-        int inputPlayer = SaxionApp.readInt();
+        inputPlayer = SaxionApp.readInt();
         while(inputPlayer<2||inputPlayer>4) {
             SaxionApp.removeLastPrint();
             SaxionApp.printLine("ERROR:(2-4)",Color.red);
@@ -38,14 +38,14 @@ public class Application implements Runnable {
         while(!endGame) {
             //graphics
             SaxionApp.setBackgroundColor(Color.black);
-            drawMoneyPlayer(inputPlayer);
+            drawMoneyPlayer();
             //game
             searchStreet();
             showMainMenu();
             checkInputMain();
         }
     }
-    public void drawMoneyPlayer(int inputPlayer) {
+    public void drawMoneyPlayer() {
         for (int n = 0; n < inputPlayer; n++) {
             SaxionApp.setFill(Color.darkGray);
             SaxionApp.setBorderColor(Color.gray);
@@ -168,10 +168,12 @@ public class Application implements Runnable {
     }
 
     public void showMainMenu() {
-        SaxionApp.printLine("Kies een optie:");
-        SaxionApp.printLine("1. Straten ruilen");
-        SaxionApp.printLine("2. Huisjes/hotels plaatsen");
-        SaxionApp.printLine("3. Beurt beëindigen");
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        SaxionApp.drawBorderedText("Kies een optie:",430,200,30);
+        SaxionApp.drawBorderedText("1. Straten ruilen",410,230,30);
+        SaxionApp.drawBorderedText("2. Huisjes/hotels plaatsen",390,260,30);
+        SaxionApp.drawBorderedText("3. Beurt beëindigen",370,290,30);
     }
 
     public void checkInputMain(){
