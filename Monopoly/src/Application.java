@@ -36,8 +36,10 @@ public class Application implements Runnable {
         SaxionApp.turnBorderOn();
         //post choose player
         while(!endGame) {
+            //graphics
             SaxionApp.setBackgroundColor(Color.black);
             drawMoneyPlayer(inputPlayer);
+            //game
             searchStreet();
             showMainMenu();
             checkInputMain();
