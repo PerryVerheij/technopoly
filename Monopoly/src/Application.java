@@ -48,7 +48,7 @@ public class Application implements Runnable {
                 checkInputOwner();
             } else {
                 showPlayerMenu();
-                checkInputPlayer();
+                checkInputPlayer(activePlayer);
             }
             activePlayer = players.get(0);
         }
@@ -189,7 +189,7 @@ public class Application implements Runnable {
         SaxionApp.drawBorderedText("3. Beurt beëindigen",370,290,30);
     }
 
-    public void checkInputPlayer(){
+    public void checkInputPlayer(Speler activePlayer){
         char input = SaxionApp.readChar();
         switch (input){
             case 1:
@@ -197,6 +197,11 @@ public class Application implements Runnable {
             case 2:
                 break;
             case 3:
+                if (activePlayer.playerID<amountOfPlayers-1){
+                    activePlayer= players.get(activePlayer.playerID+1);
+                }else{
+                    activePlayer =players.get(0);
+                }
                 break;
         }
     }
