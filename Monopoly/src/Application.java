@@ -39,7 +39,7 @@ public class Application implements Runnable {
         //post choose player
         while(!endGame) {
             //graphics
-            SaxionApp.setBackgroundColor(Color.black);
+
             drawMoneyPlayer();
             //game
             searchStreet();
@@ -186,10 +186,12 @@ public class Application implements Runnable {
     public void showPlayerMenu() {
         SaxionApp.clear();
         drawMoneyPlayer();
+        SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Kies een optie:",430,200,30);
         SaxionApp.drawBorderedText("1. Straten ruilen",410,230,30);
         SaxionApp.drawBorderedText("2. Huisjes/hotels plaatsen",390,260,30);
         SaxionApp.drawBorderedText("3. Beurt beëindigen",370,290,30);
+        SaxionApp.pause();
     }
 
     public void checkInputPlayer(Speler activePlayer){
@@ -208,6 +210,7 @@ public class Application implements Runnable {
     public void showOwnerMenu() {
         SaxionApp.clear();
         drawMoneyPlayer();
+        SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Kies een optie:",430,200,30);
         SaxionApp.drawBorderedText("1. Straten ruilen",410,230,30);
         SaxionApp.drawBorderedText("2. Huisjes/hotels plaatsen",390,260,30);
