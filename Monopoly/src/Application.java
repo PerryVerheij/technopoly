@@ -212,11 +212,11 @@ public class Application implements Runnable {
     public void checkInputPlayer(Speler activePlayer){
         char input = SaxionApp.readChar();
         switch (input){
-            case 1:
+            case '1':
                 break;
-            case 2:
+            case '2':
                 break;
-            case 3:
+            case '3':
                 updateActivePlayer();
                 break;
         }
@@ -235,11 +235,11 @@ public class Application implements Runnable {
     public void checkInputOwner() {
         char input = SaxionApp.readChar();
         switch (input){
-            case 1:
+            case '1':
                 break;
-            case 2:
+            case '2':
                 break;
-            case 3:
+            case '3':
                 updateActivePlayer();
                 break;
         }
