@@ -50,7 +50,6 @@ public class Application implements Runnable {
                 showPlayerMenu();
                 checkInputPlayer(activePlayer);
             }
-            activePlayer = players.get(0);
         }
     }
     public void drawMoneyPlayer() {
@@ -177,7 +176,7 @@ public class Application implements Runnable {
         }
         SaxionApp.printLine("Voer je keuze in: ");
         int streetChoice = SaxionApp.readInt();
-        if(streetChoice < 1 || streetChoice > matchingStreets.size()) {
+        while(streetChoice < 1 || streetChoice > matchingStreets.size()) {
             SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
             SaxionApp.printLine("Voer je keuze in: ");
             streetChoice = SaxionApp.readInt();
