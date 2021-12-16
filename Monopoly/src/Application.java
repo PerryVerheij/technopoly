@@ -34,6 +34,7 @@ public class Application implements Runnable {
             amountOfPlayers = SaxionApp.readInt();
         }
         initializePlayers(amountOfPlayers);
+        activePlayer = players.get(0);
         SaxionApp.turnBorderOn();
         //post choose player
         while(!endGame) {
@@ -49,6 +50,7 @@ public class Application implements Runnable {
                 showPlayerMenu();
                 checkInputPlayer();
             }
+            activePlayer = players.get(0);
         }
     }
     public void drawMoneyPlayer() {
