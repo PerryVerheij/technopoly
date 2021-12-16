@@ -19,6 +19,8 @@ public class Application implements Runnable {
     Straat selectedStreet = null;
     Speler activePlayer = null;
     int inputPlayer=0;
+    int testactive = 1;
+
     public void run() {
         //pre choose player
         initializeStreets();
@@ -194,6 +196,11 @@ public class Application implements Runnable {
             case 2:
                 break;
             case 3:
+                if (testactive<inputPlayer-1){
+                    testactive++;
+                }else{
+                    testactive = testactive-(inputPlayer-1);
+            }
                 break;
         }
     }
@@ -215,6 +222,7 @@ public class Application implements Runnable {
             case 2:
                 break;
             case 3:
+
                 break;
         }
     }
