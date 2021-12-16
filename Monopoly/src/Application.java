@@ -11,13 +11,13 @@ public class Application implements Runnable {
     public static void main(String[] args) {
         SaxionApp.start(new Application(), 1000, 700);
     }
-//
 
     //global "variables"
     ArrayList<Straat> streets = new ArrayList<>();
     ArrayList<Speler> players = new ArrayList<>();
     boolean endGame = false;
     Straat selectedStreet = null;
+    Speler activePlayer = null;
     int inputPlayer=0;
     public void run() {
         //pre choose player
@@ -41,8 +41,13 @@ public class Application implements Runnable {
             drawMoneyPlayer();
             //game
             searchStreet();
-            showMainMenu();
-            checkInputMain();
+            if(selectedStreet.owner == activePlayer.playerID) {
+                showOwnerMenu();
+                checkInputOwner();
+            } else {
+                showPlayerMenu();
+                checkInputPlayer();
+            }
         }
     }
     public void drawMoneyPlayer() {
@@ -172,7 +177,7 @@ public class Application implements Runnable {
         }
     }
 
-    public void showMainMenu() {
+    public void showPlayerMenu() {
         SaxionApp.clear();
         drawMoneyPlayer();
         SaxionApp.drawBorderedText("Kies een optie:",430,200,30);
@@ -181,7 +186,28 @@ public class Application implements Runnable {
         SaxionApp.drawBorderedText("3. Beurt beëindigen",370,290,30);
     }
 
-    public void checkInputMain(){
+    public void checkInputPlayer(){
+        char input = SaxionApp.readChar();
+        switch (input){
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+    }
+
+    public void showOwnerMenu() {
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        SaxionApp.drawBorderedText("Kies een optie:",430,200,30);
+        SaxionApp.drawBorderedText("1. Straten ruilen",410,230,30);
+        SaxionApp.drawBorderedText("2. Huisjes/hotels plaatsen",390,260,30);
+        SaxionApp.drawBorderedText("3. Beurt beëindigen",370,290,30);
+    }
+
+    public void checkInputOwner() {
         char input = SaxionApp.readChar();
         switch (input){
             case 1:
