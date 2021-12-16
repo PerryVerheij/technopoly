@@ -17,6 +17,7 @@ public class Application implements Runnable {
     ArrayList<Straat> streets = new ArrayList<>();
     ArrayList<Speler> players = new ArrayList<>();
     boolean endGame = false;
+    Straat selectedStreet = null;
 
     public void run() {
         //pre choose player
@@ -143,11 +144,11 @@ public class Application implements Runnable {
         }
         SaxionApp.printLine("Voer je keuze in: ");
         int streetChoice = SaxionApp.readInt() -1;
-        if(matchingStreets.get(streetChoice).name.equals((streets.get(0).name))) {
-
+        for(Straat street : streets) {
+            if(matchingStreets.get(streetChoice).name.equals(street.name)) {
+                selectedStreet = street;
+            }
         }
-
-        SaxionApp.pause();
     }
 
     public void showMainMenu() {
