@@ -167,17 +167,20 @@ public class Application implements Runnable {
             SaxionApp.printLine(matchingStreets.get(i).name);
         }
         SaxionApp.printLine("Voer je keuze in: ");
-        int streetChoice = SaxionApp.readInt() -1;
-        if(streetChoice < 1 || streetChoice >= matchingStreets.size()) {
+        int streetChoice = SaxionApp.readInt();
+        if(streetChoice < 1 || streetChoice > matchingStreets.size()) {
             SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
             SaxionApp.printLine("Voer je keuze in: ");
-            streetChoice = SaxionApp.readInt() -1;
+            streetChoice = SaxionApp.readInt();
         }
+        streetChoice--;
         for(Straat street : streets) {
             if(matchingStreets.get(streetChoice).name.equals(street.name)) {
                 selectedStreet = street;
+                SaxionApp.print(street.name);
             }
         }
+        SaxionApp.pause();
     }
 
     public void showPlayerMenu() {
@@ -197,11 +200,7 @@ public class Application implements Runnable {
             case 2:
                 break;
             case 3:
-                if (activePlayer.playerID<amountOfPlayers-1){
-                    activePlayer= players.get(activePlayer.playerID+1);
-                }else{
-                    activePlayer =players.get(0);
-                }
+                updateActivePlayer();
                 break;
         }
     }
@@ -223,7 +222,16 @@ public class Application implements Runnable {
             case 2:
                 break;
             case 3:
+                updateActivePlayer();
                 break;
+        }
+    }
+
+    public void updateActivePlayer() {
+        if (activePlayer.playerID<amountOfPlayers-1){
+            activePlayer= players.get(activePlayer.playerID+1);
+        }else{
+            activePlayer =players.get(0);
         }
     }
 }
