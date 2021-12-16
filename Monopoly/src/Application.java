@@ -160,6 +160,11 @@ public class Application implements Runnable {
         }
         SaxionApp.printLine("Voer je keuze in: ");
         int streetChoice = SaxionApp.readInt() -1;
+        if(streetChoice < 1 || streetChoice >= matchingStreets.size()) {
+            SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
+            SaxionApp.printLine("Voer je keuze in: ");
+            streetChoice = SaxionApp.readInt() -1;
+        }
         for(Straat street : streets) {
             if(matchingStreets.get(streetChoice).name.equals(street.name)) {
                 selectedStreet = street;
