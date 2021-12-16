@@ -24,8 +24,13 @@ public class Application implements Runnable {
 
         //choose player
         SaxionApp.turnBorderOff();
-        SaxionApp.drawBorderedText("Choose the amount of players (2-8)",69,69,23);
+        SaxionApp.drawBorderedText("Choose the amount of players (2-4)",69,69,23);
         int inputPlayer = SaxionApp.readInt();
+        while(inputPlayer<2||inputPlayer>4) {
+            SaxionApp.removeLastPrint();
+            SaxionApp.printLine("ERROR",Color.red);
+            inputPlayer = SaxionApp.readInt();
+        }
         initializePlayers(inputPlayer);
         SaxionApp.turnBorderOn();
         //post choose player
