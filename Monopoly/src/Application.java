@@ -24,11 +24,11 @@ public class Application implements Runnable {
 
         //choose player
         SaxionApp.turnBorderOff();
-        SaxionApp.drawBorderedText("Choose the amount of players (2-4)",69,69,23);
+        SaxionApp.drawBorderedText("Choose the amount of players (2-4)",175,0,36);
         int inputPlayer = SaxionApp.readInt();
         while(inputPlayer<2||inputPlayer>4) {
             SaxionApp.removeLastPrint();
-            SaxionApp.printLine("ERROR",Color.red);
+            SaxionApp.printLine("ERROR:(2-4)",Color.red);
             inputPlayer = SaxionApp.readInt();
         }
         initializePlayers(inputPlayer);
@@ -120,7 +120,8 @@ public class Application implements Runnable {
             Speler newPlayer = new Speler();
             newPlayer.playerID = i;
             SaxionApp.removeLastDraw();
-            SaxionApp.drawBorderedText("Enter name for player "+i,69,69,29);
+            SaxionApp.removeLastPrint();
+            SaxionApp.drawBorderedText("Enter name for player "+i,300,0,36);
             newPlayer.playerName = SaxionApp.readString();
             players.add(newPlayer);
             SaxionApp.clear();
