@@ -247,7 +247,7 @@ public class Application implements Runnable {
 
 
     public void updateActivePlayer() {
-        if (activePlayer.playerID<amountOfPlayers-1){
+        if (activePlayer.playerID<amountOfPlayers){
             activePlayer= players.get(activePlayer.playerID+1);
         }else{
             activePlayer =players.get(0);
