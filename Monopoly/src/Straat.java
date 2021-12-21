@@ -5,7 +5,7 @@ public class Straat {
     int mortgage = 0;
     int housePrice = 0;
     int amountOfHouses = 0;
-    boolean amountOfHotels = false;
+    boolean hotelExistent = false;
     int undeveloped = 0;
     int house1 = 0;
     int house2 = 0;
