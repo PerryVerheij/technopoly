@@ -1,5 +1,6 @@
 public class Straat {
     String name = "";
+    int streetID = 0;
     int value = 0;
     int group = 0;
     int mortgage = 0;

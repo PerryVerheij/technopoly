@@ -23,7 +23,7 @@ public class Application implements Runnable {
     public void run() {
         //pre choose player
         initializeStreets();
-
+        initializeCards();
         //choose player
         SaxionApp.turnBorderOff();
         SaxionApp.drawBorderedText("Choose the amount of players (2-4)",175,0,36);
@@ -46,8 +46,11 @@ public class Application implements Runnable {
             //game
             searchStreet();
             if(selectedStreet.buyable) {
-
-                    //TODO: optie om te kopen
+                SaxionApp.print("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + "? (ja of nee)");
+                String buyChoice = SaxionApp.readString();
+                if(buyChoice.equalsIgnoreCase("ja")) {
+                    buyStreet();
+                }
             } else if (selectedStreet.owner != activePlayer.playerID) {
                 payInterest();
             }
@@ -127,12 +130,30 @@ public class Application implements Runnable {
             newStreet.mortgage = readerLocations.getInt(3);
             streets.add(newStreet);
         }
+        for(int i=0;;i++) {
+            //TODO: unieke ID aan elke straat toevoegen
+        }
         while(readerTaxes.loadRow()) {
             Straat newStreet = new Straat();
             newStreet.name = readerTaxes.getString(0);
             newStreet.undeveloped = readerTaxes.getInt(1);
             newStreet.buyable = false;
             streets.add(newStreet);
+        }
+
+        Straat kansstraat = new Straat();
+        Straat algstraat = new Straat();
+        kansstraat.name = "Kans";
+        algstraat.name = "Algemeen Fonds";
+        algstraat.buyable = false;
+        kansstraat.buyable = false;
+    }
+    public void initializeCards(){
+        CsvReader cardreader = new CsvReader("kaarten.csv");
+        cardreader.skipRow();
+        cardreader.setSeparator(',');
+        while(cardreader.loadRow()){
+
         }
     }
     public void initializePlayers(int inputPlayer){
@@ -199,6 +220,12 @@ public class Application implements Runnable {
             }
         }
         SaxionApp.pause();
+    }
+
+    public void buyStreet() {
+        int value = selectedStreet.value;
+        players.get(activePlayer.playerID).accountBalance = players.get(activePlayer.playerID).accountBalance-value;
+        streets.get(selectedStreet.streetID).owner = activePlayer.playerID;
     }
 
     public void payInterest(){
