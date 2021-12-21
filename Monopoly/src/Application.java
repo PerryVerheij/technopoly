@@ -2,7 +2,6 @@ import nl.saxion.app.CsvReader;
 import nl.saxion.app.SaxionApp;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -19,7 +18,7 @@ public class Application implements Runnable {
     Straat selectedStreet = null;
     Speler activePlayer = null;
     int amountOfPlayers=0;
-    boolean nextbeurt=false;
+    boolean nextTurn =false;
 
     public void run() {
         //pre choose player
@@ -40,18 +39,19 @@ public class Application implements Runnable {
         //post choose player
         while(!endGame) {
             //set variables
-            nextbeurt = false;
+            nextTurn = false;
             //graphics
             SaxionApp.clear();
             drawMoneyPlayer();
             //game
             searchStreet();
             if(selectedStreet.buyable) {
-                    //optie om te kopen
+
+                    //TODO: optie om te kopen
             } else if (selectedStreet.owner != activePlayer.playerID) {
-                    payInterest();
+                payInterest();
             }
-            while(!nextbeurt) {
+            while(!nextTurn) {
                 showTurnMenu();
                 checkTurnInput();
             }
@@ -252,6 +252,6 @@ public class Application implements Runnable {
         }else{
             activePlayer =players.get(0);
         }
-        nextbeurt =true;
+        nextTurn =true;
     }
 }
