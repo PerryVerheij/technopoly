@@ -53,12 +53,12 @@ public class Application implements Runnable {
                 if(buyChoice.equalsIgnoreCase("ja")) {
                     buyStreet();
                 }
-            } else if (selectedStreet.owner != activePlayer.playerID) {
-                payInterest();
+            } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")) {
+                searchCards();
             }else if (selectedStreet.name.equalsIgnoreCase("kans")){
-
-            }else if(selectedStreet.name.equalsIgnoreCase("algemeen fonds")){
-
+                searchCards();
+            }else if(selectedStreet.owner != activePlayer.playerID){
+                payInterest();
             }
             while(!nextTurn) {
                 showTurnMenu();
@@ -233,7 +233,7 @@ public class Application implements Runnable {
             }
         }
     }
-    public void searchcards(){
+    public void searchCards(){
     ArrayList<Card> matchingcards = new ArrayList<>();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Voer de code van de kaart in: ", 200, 200, 38);
