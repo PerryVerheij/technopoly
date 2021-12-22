@@ -264,18 +264,31 @@ public class Application implements Runnable {
         for (Card Card : cards) {
             if (matchingCards.get(cardChoice).code.equals(Card.code)) {
                 selectedCard = Card;
-                SaxionApp.print(Card.code);
+                SaxionApp.printLine(Card.code);
             }
         }
-        SaxionApp.pause();
+
     }
 
     public void checkSelectedCard(){
         if (selectedCard.code.equals("a7")){
-
-        }else if(selectedCard.code.charAt(0) == 'a')
-            players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance + Integer.parseInt(selectedCard.geld);
+            for (Speler player:players){
+                if (player.playerID!=activePlayer.playerID){
+                    player.accountBalance-=10;
+                }else{
+                    player.accountBalance+=10*(amountOfPlayers-1);
+                }
+            }
+        }else if (selectedCard.code.equals("k1")||selectedCard.code.equals("k7")){
+            SaxionApp.printLine(selectedCard.geld+" wordt betaald voor servers en "+selectedCard.geld2+ " wordt betaald voor datacentra.");
+            SaxionApp.pause();
+            int placeholder =4;
+            int placeholder2 =2;
+            players.get(activePlayer.playerID-1).accountBalance+=placeholder*Integer.parseInt(selectedCard.geld)+placeholder2*Integer.parseInt(selectedCard.geld2);
+        }else if(selectedCard.code.charAt(0) == 'a'||selectedCard.code.charAt(0) == 'k'||selectedCard.code.equals("start")) {
+            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.geld);
         }
+    }
 
     public void buyStreet() {
         int value = selectedStreet.value;
