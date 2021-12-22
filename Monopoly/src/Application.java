@@ -55,6 +55,10 @@ public class Application implements Runnable {
                 }
             } else if (selectedStreet.owner != activePlayer.playerID) {
                 payInterest();
+            }else if (selectedStreet.name.equalsIgnoreCase("kans")){
+
+            }else if(selectedStreet.name.equalsIgnoreCase("algemeen fonds")){
+
             }
             while(!nextTurn) {
                 showTurnMenu();
@@ -150,6 +154,8 @@ public class Application implements Runnable {
         algstraat.name = "Algemeen Fonds";
         algstraat.buyable = false;
         kansstraat.buyable = false;
+        streets.add(algstraat);
+        streets.add(kansstraat);
     }
     public void initializeCards(){
         CsvReader cardreader = new CsvReader("kaarten.csv");
