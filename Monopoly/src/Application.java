@@ -13,6 +13,7 @@ public class Application implements Runnable {
 
     //global "variables"
     ArrayList<Straat> streets = new ArrayList<>();
+    ArrayList<Card> cards = new ArrayList<>();
     ArrayList<Speler> players = new ArrayList<>();
     boolean endGame = false;
     Straat selectedStreet = null;
@@ -155,7 +156,11 @@ public class Application implements Runnable {
         cardreader.skipRow();
         cardreader.setSeparator(',');
         while(cardreader.loadRow()){
-
+            Card card = new Card();
+            card.code = cardreader.getString(0);
+            card.geld = cardreader.getInt(1);
+            card.geld2 = cardreader.getInt(2);
+            cards.add(card);
         }
     }
     public void initializePlayers(int inputPlayer){
@@ -240,23 +245,23 @@ public class Application implements Runnable {
         SaxionApp.printLine();
         SaxionApp.print("                                                  ");
         String userInput = SaxionApp.readString();
-        for (Card Card : placeholder) {
-        if (Card.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+        for (Card Card : cards) {
+        if (Card.code.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
             matchingcards.add(Card);
         }
     }
         while (matchingcards.size() == 0) {
         SaxionApp.printLine("Er zijn geen straten gevonden. Probeer het opnieuw.");
         userInput = SaxionApp.readString();
-        for (Card Card : placeholder) {
-            if (Card.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+        for (Card Card : cards) {
+            if (Card.code.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
                 matchingcards.add(Card);
             }
         }
     }
         for (int i = 0; i < matchingcards.size(); i++) {
         SaxionApp.print(i + 1 + ". ");
-        SaxionApp.printLine(matchingcards.get(i).name);
+        SaxionApp.printLine(matchingcards.get(i).code);
     }
         SaxionApp.printLine("Voer je keuze in: ");
     int cardchoice = SaxionApp.readInt();
@@ -266,10 +271,10 @@ public class Application implements Runnable {
             cardchoice = SaxionApp.readInt();
     }
         cardchoice--;
-        for (Card Card : placeholder) {
-        if (matchingcards.get(cardchoice).name.equals(Card.name)) {
+        for (Card Card : cards) {
+        if (matchingcards.get(cardchoice).code.equals(Card.code)) {
             selectedCard = Card;
-            SaxionApp.print(Card.name);
+            SaxionApp.print(Card.code);
         }
     }
         SaxionApp.pause();
