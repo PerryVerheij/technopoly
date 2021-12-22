@@ -131,8 +131,9 @@ public class Application implements Runnable {
             newStreet.mortgage = readerLocations.getInt(3);
             streets.add(newStreet);
         }
-        for(int i=0;;i++) {
-            //TODO: unieke ID aan elke straat toevoegen
+        // add unique street ID
+        for(int i=0;i<streets.size();i++) {
+            streets.get(i).streetID = i+1;
         }
         while(readerTaxes.loadRow()) {
             Straat newStreet = new Straat();
