@@ -4,15 +4,15 @@ public class Straat {
     int value = 0;
     int group = 0;
     int mortgage = 0;
-    int housePrice = 0;
-    int amountOfHouses = 0;
-    boolean hotelExistent = false;
+    int serverPrice = 0;
+    int amountOfServers = 0;
+    boolean datacenterExistent = false;
     int undeveloped = 0;
-    int house1 = 0;
-    int house2 = 0;
-    int house3 = 0;
-    int house4 = 0;
-    int hotel = 0;
+    int server1 = 0;
+    int server2 = 0;
+    int server3 = 0;
+    int server4 = 0;
+    int datacenter = 0;
     int owner = 0;
     boolean buyable = true;
 }
