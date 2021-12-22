@@ -158,8 +158,8 @@ public class Application implements Runnable {
         while(cardreader.loadRow()){
             Card card = new Card();
             card.code = cardreader.getString(0);
-            card.geld = cardreader.getInt(1);
-            card.geld2 = cardreader.getInt(2);
+            card.geld = cardreader.getString(1);
+            card.geld2 = cardreader.getString(2);
             cards.add(card);
         }
     }
@@ -282,7 +282,7 @@ public class Application implements Runnable {
 
     public void buyStreet() {
         int value = selectedStreet.value;
-        players.get(activePlayer.playerID).accountBalance = players.get(activePlayer.playerID).accountBalance-value;
+        players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance-value;
         streets.get(selectedStreet.streetID).owner = activePlayer.playerID;
     }
 
