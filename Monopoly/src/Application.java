@@ -55,6 +55,10 @@ public class Application implements Runnable {
                 }
             } else if (selectedStreet.owner != activePlayer.playerID) {
                 payInterest();
+            }else if (selectedStreet.name.equalsIgnoreCase("kans")){
+
+            }else if(selectedStreet.name.equalsIgnoreCase("algemeen fonds")){
+
             }
             while(!nextTurn) {
                 showTurnMenu();
