@@ -226,7 +226,6 @@ public class Application implements Runnable {
                 SaxionApp.print(street.name);
             }
         }
-        SaxionApp.pause();
     }
     public void searchcards(){
     ArrayList<Card> matchingcards = new ArrayList<>();
@@ -333,10 +332,10 @@ public class Application implements Runnable {
 
     public void updateActivePlayer() {
         if (activePlayer.playerID<amountOfPlayers){
-            activePlayer= players.get(activePlayer.playerID);
+            activePlayer = players.get(activePlayer.playerID);
         }else{
-            activePlayer =players.get(0);
+            activePlayer = players.get(0);
         }
-        nextTurn =true;
+        nextTurn = true;
     }
 }
