@@ -16,6 +16,7 @@ public class Application implements Runnable {
     ArrayList<Speler> players = new ArrayList<>();
     boolean endGame = false;
     Straat selectedStreet = null;
+    Card selectedCard = null;
     Speler activePlayer = null;
     int amountOfPlayers=0;
     boolean nextTurn =false;
@@ -221,6 +222,57 @@ public class Application implements Runnable {
         }
         SaxionApp.pause();
     }
+    public void searchcards(){
+    ArrayList<Card> matchingcards = new ArrayList<>();
+        SaxionApp.setFill(Color.white);
+        SaxionApp.drawBorderedText("Voer de code van de kaart in: ", 200, 200, 38);
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.printLine();
+        SaxionApp.print("                                                  ");
+        String userInput = SaxionApp.readString();
+        for (Card Card : placeholder) {
+        if (Card.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+            matchingcards.add(Card);
+        }
+    }
+        while (matchingcards.size() == 0) {
+        SaxionApp.printLine("Er zijn geen straten gevonden. Probeer het opnieuw.");
+        userInput = SaxionApp.readString();
+        for (Card Card : placeholder) {
+            if (Card.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+                matchingcards.add(Card);
+            }
+        }
+    }
+        for (int i = 0; i < matchingcards.size(); i++) {
+        SaxionApp.print(i + 1 + ". ");
+        SaxionApp.printLine(matchingcards.get(i).name);
+    }
+        SaxionApp.printLine("Voer je keuze in: ");
+    int cardchoice = SaxionApp.readInt();
+        while (cardchoice < 1 || cardchoice > matchingcards.size()) {
+        SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
+        SaxionApp.printLine("Voer je keuze in: ");
+            cardchoice = SaxionApp.readInt();
+    }
+        cardchoice--;
+        for (Card Card : placeholder) {
+        if (matchingcards.get(cardchoice).name.equals(Card.name)) {
+            selectedCard = Card;
+            SaxionApp.print(Card.name);
+        }
+    }
+        SaxionApp.pause();
+}
 
     public void buyStreet() {
         int value = selectedStreet.value;
