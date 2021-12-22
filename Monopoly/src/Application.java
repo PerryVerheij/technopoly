@@ -150,6 +150,8 @@ public class Application implements Runnable {
         algstraat.name = "Algemeen Fonds";
         algstraat.buyable = false;
         kansstraat.buyable = false;
+        streets.add(algstraat);
+        streets.add(kansstraat);
     }
     public void initializeCards(){
         CsvReader cardreader = new CsvReader("kaarten.csv");
