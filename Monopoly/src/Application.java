@@ -57,10 +57,9 @@ public class Application implements Runnable {
                 if(buyChoice.equalsIgnoreCase("ja")) {
                     buyStreet();
                 }
-            } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")) {
+            } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
                 searchCards();
-            }else if (selectedStreet.name.equalsIgnoreCase("kans")){
-                searchCards();
+                checkSelectedCard();
             }else if(selectedStreet.owner != activePlayer.playerID){
                 payInterest();
             }
@@ -234,17 +233,6 @@ public class Application implements Runnable {
         ArrayList<Card> matchingCards = new ArrayList<>();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Voer de code van de kaart in: ", 200, 200, 38);
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
-        SaxionApp.printLine();
         SaxionApp.print("                                                  ");
         String userInput = SaxionApp.readString();
         for (Card Card : cards) {
