@@ -279,12 +279,12 @@ public class Application implements Runnable {
                     player.accountBalance+=10*(amountOfPlayers-1);
                 }
             }
-        }else if (selectedCard.code.equals("k1")||selectedCard.code.equals("k7")){
+        }else if (selectedCard.code.equals("k1")||selectedCard.code.equals("k8")){
             SaxionApp.printLine(selectedCard.geld+" wordt betaald voor servers en "+selectedCard.geld2+ " wordt betaald voor datacentra.");
             SaxionApp.pause();
-            int placeholder =4;
-            int placeholder2 =2;
-            players.get(activePlayer.playerID-1).accountBalance+=placeholder*Integer.parseInt(selectedCard.geld)+placeholder2*Integer.parseInt(selectedCard.geld2);
+            int placehouses =0;
+            int placehotels =0;
+            players.get(activePlayer.playerID-1).accountBalance+=placehouses*Integer.parseInt(selectedCard.geld)+placehotels*Integer.parseInt(selectedCard.geld2);
         }else if(selectedCard.code.charAt(0) == 'a'||selectedCard.code.charAt(0) == 'k'||selectedCard.code.equals("start")) {
             players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.geld);
         }
