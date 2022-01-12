@@ -282,9 +282,10 @@ public class Application implements Runnable {
         }else if (selectedCard.code.equals("k1")||selectedCard.code.equals("k8")){
             SaxionApp.printLine(selectedCard.geld+" wordt betaald voor servers en "+selectedCard.geld2+ " wordt betaald voor datacentra.");
             SaxionApp.pause();
-            int placehouses =0;
-            int placehotels =0;
-            players.get(activePlayer.playerID-1).accountBalance+=placehouses*Integer.parseInt(selectedCard.geld)+placehotels*Integer.parseInt(selectedCard.geld2);
+            //placeholders
+            int placedhouses =0;
+            int placedhotels =0;
+            players.get(activePlayer.playerID-1).accountBalance+=placedhouses*Integer.parseInt(selectedCard.geld)+placedhotels*Integer.parseInt(selectedCard.geld2);
         }else if(selectedCard.code.charAt(0) == 'a'||selectedCard.code.charAt(0) == 'k'||selectedCard.code.equals("start")) {
             players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.geld);
         }
