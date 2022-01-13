@@ -539,7 +539,7 @@ public class Application implements Runnable {
             }
         }else if(selectedStreet.amountOfServers!=0){
             SaxionApp.printLine("Hoeveel servers wil je slopen?");
-            int input =0;
+            int input =-120;
             while (input<0||input>selectedStreet.amountOfServers){
                 input=SaxionApp.readInt();
             }
