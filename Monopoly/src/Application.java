@@ -368,6 +368,9 @@ public class Application implements Runnable {
     }
 
     public void printGroupMenu(){
+        for (int i =0;i<5;i++){
+            SaxionApp.removeLastDraw();
+        }
         SaxionApp.printLine("1. Donkerblauw");
         SaxionApp.printLine("2. Lichtgrijs");
         SaxionApp.printLine("3. Paars");
@@ -380,9 +383,12 @@ public class Application implements Runnable {
 
     public void checkGroup(){
         int input = 9;
-        while(!(input>0&&input<9)) {
-            input = SaxionApp.readChar();
+        while(input<0||input>8) {
+            SaxionApp.printLine("test");
+            input = SaxionApp.readInt();
+            SaxionApp.printLine("test");
         }
+        SaxionApp.printLine("test2");
         int amountstreets;
         if (input ==1||input==8){
             amountstreets = 2;
@@ -396,6 +402,7 @@ public class Application implements Runnable {
             }
         }
         if(ownedofgroup!=amountstreets) {
+            SaxionApp.printLine("Je hebt niet alles van deze groep.");
             SaxionApp.printLine("Wil je opnieuw proberen?(Typ \"ja\" om opnieuw te proberen)");
             String stringinput = SaxionApp.readString();
             if(stringinput.equalsIgnoreCase("ja")){
