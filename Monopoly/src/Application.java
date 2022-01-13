@@ -347,10 +347,11 @@ public class Application implements Runnable {
                 break;
             case '2':
                 printGroupMenu();
-                checkGroup();
+                checkGroup(false);
                 break;
             case '3':
-
+                printGroupMenu();
+                checkGroup(true);
                 break;
             case '4':
                 getMortgage();
@@ -384,7 +385,7 @@ public class Application implements Runnable {
         SaxionApp.printLine("8. Blauw");
     }
 
-    public void checkGroup(){
+    public void checkGroup(boolean demolish){
         int input = 9;
         while(input<0||input>8) {
             input = SaxionApp.readInt();
@@ -407,79 +408,83 @@ public class Application implements Runnable {
             String stringinput = SaxionApp.readString();
             if(stringinput.equalsIgnoreCase("ja")){
                 printGroupMenu();
-                checkGroup();
+                checkGroup(demolish);
             }
         }else{
-            SaxionApp.printLine("Kies de straat waarop je wil bouwen.");
-            Straat street1=streets.get(0);
-            Straat street2=streets.get(0);
-            Straat street3=streets.get(0);
-            int i2=1;
-            for (Straat street:streets) {
-                if (street.group==input) {
-                    SaxionApp.printLine(i2+". " + street.name);
-                    switch (i2){
-                        case 1->street1=street;
-                        case 2->street2=street;
-                        case 3->street3=street;
+            if (!demolish) {
+                SaxionApp.printLine("Kies de straat waarop je wil bouwen.");
+                Straat street1 = streets.get(0);
+                Straat street2 = streets.get(0);
+                Straat street3 = streets.get(0);
+                int i2 = 1;
+                for (Straat street : streets) {
+                    if (street.group == input) {
+                        SaxionApp.printLine(i2 + ". " + street.name);
+                        switch (i2) {
+                            case 1 -> street1 = street;
+                            case 2 -> street2 = street;
+                            case 3 -> street3 = street;
+                        }
+                        i2++;
                     }
-                    i2++;
                 }
-            }
-            SaxionApp.printLine("straat 1 heeft: "+street1.amountOfServers);
-            if (street1.datacenterExistent){
-                SaxionApp.printLine("straat 1 heeft een datacenter");
-            }
-            SaxionApp.printLine("straat 2 heeft: "+street2.amountOfServers);
-            if (street2.datacenterExistent){
-                SaxionApp.printLine("straat 2 heeft een datacenter");
-            }
-            if (amountstreets==3) {
-                SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
-                if (street3.datacenterExistent){
-                    SaxionApp.printLine("straat 3 heeft een datacenter");
+                SaxionApp.printLine("straat 1 heeft: " + street1.amountOfServers);
+                if (street1.datacenterExistent) {
+                    SaxionApp.printLine("straat 1 heeft een datacenter");
                 }
-            }
-            int streetinput=0;
-            while(streetinput<1||streetinput>3) {
-                streetinput = SaxionApp.readInt();
-            }
-            switch (streetinput){
-                case 1->selectedStreet=street1;
-                case 2->selectedStreet=street2;
-                case 3->selectedStreet=street3;
-            }
-            int price = selectedStreet.serverPrice;
-            if (selectedStreet.amountOfServers!=4&&!selectedStreet.datacenterExistent) {
-                SaxionApp.printLine("Hoeveel servers wil je bouwen op "+selectedStreet.name+"?(typ 0 om te stoppen)");
-                input =-1;
-                while(input<0||input>4-selectedStreet.amountOfServers) {
-                    input = SaxionApp.readInt();
+                SaxionApp.printLine("straat 2 heeft: " + street2.amountOfServers);
+                if (street2.datacenterExistent) {
+                    SaxionApp.printLine("straat 2 heeft een datacenter");
                 }
-                if(price*input>activePlayer.accountBalance){
-                    SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
-                    SaxionApp.pause();
-                }else {
-                    players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price * input;
-                    streets.get(selectedStreet.streetID-1/*?!*/).amountOfServers=streets.get(selectedStreet.streetID-1/*?!*/).amountOfServers+input;
+                if (amountstreets == 3) {
+                    SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
+                    if (street3.datacenterExistent) {
+                        SaxionApp.printLine("straat 3 heeft een datacenter");
+                    }
                 }
-            }else if (!selectedStreet.datacenterExistent){
-                SaxionApp.printLine("Wil je een datacenter bouwen?(Typ \"ja\" om verder te gaan)");
-                String stringinput = SaxionApp.readString();
-                if (stringinput.equalsIgnoreCase("ja")){
-                    if(price>activePlayer.accountBalance){
+                int streetinput = 0;
+                while (streetinput < 1 || streetinput > 3) {
+                    streetinput = SaxionApp.readInt();
+                }
+                switch (streetinput) {
+                    case 1 -> selectedStreet = street1;
+                    case 2 -> selectedStreet = street2;
+                    case 3 -> selectedStreet = street3;
+                }
+                int price = selectedStreet.serverPrice;
+                if (selectedStreet.amountOfServers != 4 && !selectedStreet.datacenterExistent) {
+                    SaxionApp.printLine("Hoeveel servers wil je bouwen op " + selectedStreet.name + "?(typ 0 om te stoppen)");
+                    input = -1;
+                    while (input < 0 || input > 4 - selectedStreet.amountOfServers) {
+                        input = SaxionApp.readInt();
+                    }
+                    if (price * input > activePlayer.accountBalance) {
                         SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
                         SaxionApp.pause();
-                    }else {
-                        players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price;
-                        streets.get(selectedStreet.streetID-1/*test*/).amountOfServers=0;
-                        streets.get(selectedStreet.streetID-1/*test*/).datacenterExistent=true;
+                    } else {
+                        players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price * input;
+                        streets.get(selectedStreet.streetID - 1).amountOfServers = streets.get(selectedStreet.streetID - 1/*?!*/).amountOfServers + input;
                     }
-                }
+                } else if (!selectedStreet.datacenterExistent) {
+                    SaxionApp.printLine("Wil je een datacenter bouwen?(Typ \"ja\" om verder te gaan)");
+                    String stringinput = SaxionApp.readString();
+                    if (stringinput.equalsIgnoreCase("ja")) {
+                        if (price > activePlayer.accountBalance) {
+                            SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
+                            SaxionApp.pause();
+                        } else {
+                            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price;
+                            streets.get(selectedStreet.streetID - 1).amountOfServers = 0;
+                            streets.get(selectedStreet.streetID - 1).datacenterExistent = true;
+                        }
+                    }
 
+                } else {
+                    SaxionApp.printLine("Dit heeft al een datacenter, kies sloop servers om dit af te breken");
+                    SaxionApp.pause();
+                }
             }else{
-                SaxionApp.printLine("Dit heeft al een datacenter, kies sloop servers om dit af te breken");
-                SaxionApp.pause();
+                //demolish
             }
         }
     }
