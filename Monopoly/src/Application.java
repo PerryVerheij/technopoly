@@ -335,9 +335,9 @@ public class Application implements Runnable {
         SaxionApp.drawBorderedText("Kies een optie:",370,200,30);
         SaxionApp.drawBorderedText("1. Straten ruilen",370,230,30);
         SaxionApp.drawBorderedText("2. Servers/datacenters plaatsen",370,260,30);
-        SaxionApp.drawBorderedText("3. Servers/datacenters plaatsen",370,260,30);
-        SaxionApp.drawBorderedText("4. Hypotheek op straten",370,290,30);
-        SaxionApp.drawBorderedText("5. Beurt beëindigen",370,320,30);
+        SaxionApp.drawBorderedText("3. Servers/datacenters slopen",370,290,30);
+        SaxionApp.drawBorderedText("4. Hypotheek op straten",370,320,30);
+        SaxionApp.drawBorderedText("5. Beurt beëindigen",370,350,30);
     }
 
     public void checkTurnInput(){
@@ -443,7 +443,7 @@ public class Application implements Runnable {
                     }
                 }
                 int streetinput = 0;
-                while (streetinput < 1 || streetinput > 3) {
+                while (streetinput < 1 || streetinput >amountstreets) {
                     streetinput = SaxionApp.readInt();
                 }
                 switch (streetinput) {
@@ -484,7 +484,40 @@ public class Application implements Runnable {
                     SaxionApp.pause();
                 }
             }else{
-                //demolish
+                SaxionApp.printLine("Kies de straat waar je wil slopen.");
+                Straat street1 = streets.get(0);
+                Straat street2 = streets.get(0);
+                Straat street3 = streets.get(0);
+                int i2 = 1;
+                for (Straat street : streets) {
+                    if (street.group == input) {
+                        SaxionApp.printLine(i2 + ". " + street.name);
+                        switch (i2) {
+                            case 1 -> street1 = street;
+                            case 2 -> street2 = street;
+                            case 3 -> street3 = street;
+                        }
+                        i2++;
+                    }
+                }
+                SaxionApp.printLine("straat 1 heeft: " + street1.amountOfServers);
+                if (street1.datacenterExistent) {
+                    SaxionApp.printLine("straat 1 heeft een datacenter");
+                }
+                SaxionApp.printLine("straat 2 heeft: " + street2.amountOfServers);
+                if (street2.datacenterExistent) {
+                    SaxionApp.printLine("straat 2 heeft een datacenter");
+                }
+                if (amountstreets == 3) {
+                    SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
+                    if (street3.datacenterExistent) {
+                        SaxionApp.printLine("straat 3 heeft een datacenter");
+                    }
+                }
+                int streetinput = 0;
+                while (streetinput < 1 || streetinput > amountstreets) {
+                    streetinput = SaxionApp.readInt();
+                }
             }
         }
     }
