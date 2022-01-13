@@ -46,7 +46,7 @@ public class Application implements Runnable {
             SaxionApp.clear();
             drawMoneyPlayer();
             //game
-            searchStreet();
+            selectedStreet = searchStreet();
             if(selectedStreet.buyable) {
                 SaxionApp.print("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ");
                 String buyChoice = SaxionApp.readString();
@@ -60,7 +60,7 @@ public class Application implements Runnable {
             } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
                 searchCards();
                 checkSelectedCard();
-            }else if(selectedStreet.owner != activePlayer.playerID){
+            }else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID){
                 payInterest();
             }
             while(!nextTurn) {
@@ -69,6 +69,7 @@ public class Application implements Runnable {
             }
         }
     }
+
     public void drawMoneyPlayer() {
         for (int n = 0; n < amountOfPlayers; n++) {
             SaxionApp.setFill(Color.darkGray);
@@ -91,8 +92,8 @@ public class Application implements Runnable {
             SaxionApp.turnBorderOn();
         }
         SaxionApp.readChar();
-
     }
+
     public void initializeStreets() {
         CsvReader readerStreets = new CsvReader("reguliere_straten.csv");
         CsvReader readerLocations = new CsvReader("locaties.csv");
@@ -186,7 +187,8 @@ public class Application implements Runnable {
 
     }
 
-    public void searchStreet() {
+    public Straat searchStreet() {
+        Straat resultStreet = null;
         ArrayList<Straat> matchingStreets = new ArrayList<>();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Voer de naam van de straat in: ", 200, 200, 38);
@@ -220,14 +222,18 @@ public class Application implements Runnable {
             SaxionApp.printLine("Voer je keuze in: ");
             streetChoice = SaxionApp.readInt();
         }
+
         streetChoice--;
+
         for (Straat street : streets) {
             if (matchingStreets.get(streetChoice).name.equals(street.name)) {
-                selectedStreet = street;
                 SaxionApp.printLine(street.name);
+                resultStreet = street;
             }
         }
+        return resultStreet;
     }
+
     public void searchCards(){
         SaxionApp.removeLastDraw();
         ArrayList<Card> matchingCards = new ArrayList<>();
@@ -294,7 +300,8 @@ public class Application implements Runnable {
     public void buyStreet() {
         int value = selectedStreet.value;
         players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance-value;
-        streets.get(selectedStreet.streetID).owner = activePlayer.playerID;
+        streets.get(selectedStreet.streetID-1).owner = activePlayer.playerID;
+        streets.get(selectedStreet.streetID-1).buyable = false;
     }
 
     public void payInterest(){
@@ -311,8 +318,14 @@ public class Application implements Runnable {
             case 3 -> interestAmount = selectedStreet.server3;
             case 4 -> interestAmount = selectedStreet.server4;
         }
-        players.get(activePlayer.playerID-1).accountBalance =  players.get(activePlayer.playerID-1).accountBalance-interestAmount;
-        players.get(selectedStreet.owner).accountBalance = players.get(selectedStreet.owner).accountBalance+interestAmount;
+        players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance-interestAmount;
+        players.get(selectedStreet.owner-1).accountBalance = players.get(selectedStreet.owner-1).accountBalance+interestAmount;
+    }
+
+    public void getMortgage() {
+        Straat mortgagedStreet = null;
+        mortgagedStreet = searchStreet();
+        
     }
 
     public void showTurnMenu() {
@@ -332,15 +345,18 @@ public class Application implements Runnable {
             case '1':
                 break;
             case '2':
+                printGroupMenu();
+                checkGroup();
+
                 break;
             case '3':
+                getMortgage();
                 break;
             case '4':
                 updateActivePlayer();
                 break;
         }
     }
-
 
     public void updateActivePlayer() {
         if (activePlayer.playerID<amountOfPlayers){
@@ -349,5 +365,96 @@ public class Application implements Runnable {
             activePlayer = players.get(0);
         }
         nextTurn = true;
+    }
+
+    public void printGroupMenu(){
+        SaxionApp.printLine("1. Donkerblauw");
+        SaxionApp.printLine("2. Lichtgrijs");
+        SaxionApp.printLine("3. Paars");
+        SaxionApp.printLine("4. Oranje");
+        SaxionApp.printLine("5. Rood");
+        SaxionApp.printLine("6. Geel");
+        SaxionApp.printLine("7. Groen");
+        SaxionApp.printLine("8. Blauw");
+    }
+
+    public void checkGroup(){
+        int input = 9;
+        while(!(input>0&&input<9)) {
+            input = SaxionApp.readChar();
+        }
+        int amountstreets;
+        if (input ==1||input==8){
+            amountstreets = 2;
+        }else{
+            amountstreets = 3;
+        }
+        int ownedofgroup = 0;
+        for (Straat street:streets) {
+            if (street.owner == activePlayer.playerID&&street.group==input) {
+                ownedofgroup++;
+            }
+        }
+        if(ownedofgroup!=amountstreets) {
+            SaxionApp.printLine("Wil je opnieuw proberen?(Typ \"ja\" om opnieuw te proberen)");
+            String stringinput = SaxionApp.readString();
+            if(stringinput.equalsIgnoreCase("ja")){
+                printGroupMenu();
+                checkGroup();
+            }
+        }else{
+            SaxionApp.printLine("Kies de straat waarop je wil bouwen.");
+            Straat street1=streets.get(0);
+            Straat street2=streets.get(0);
+            Straat street3=streets.get(0);
+            int i2=1;
+            for (Straat street:streets) {
+                if (street.group==input) {
+                    SaxionApp.printLine(i2+". " + street.name);
+                    i2++;
+                    switch (i2){
+                        case 1->street1=street;
+                        case 2->street2=street;
+                        case 3->street3=street;
+                    }
+                }
+            }
+            int streetinput=0;
+            while(streetinput<1||streetinput>3) {
+                streetinput = SaxionApp.readInt();
+            }
+            switch (streetinput){
+                case 1->selectedStreet=street1;
+                case 2->selectedStreet=street2;
+                case 3->selectedStreet=street3;
+            }
+            int price = selectedStreet.serverPrice;
+            if (selectedStreet.amountOfServers!=4) {
+                SaxionApp.printLine("Hoeveel huizen wil je bouwen op "+selectedStreet.name+"?(typ 0 om te stoppen)");
+                input =-1;
+                while(input<0||input>4) {
+                    input = SaxionApp.readInt();
+                }
+                if(price*input>activePlayer.accountBalance){
+                    SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
+                }else {
+                    players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price * input;
+                    streets.get(selectedStreet.streetID-1/*?!*/).amountOfServers=input;
+                }
+            }else{
+                SaxionApp.printLine("Wil je een datacenter bouwen?(Typ \"ja\" om verder te gaan)");
+                String stringinput = SaxionApp.readString();
+                if (stringinput.equalsIgnoreCase("ja")){
+                    if(price>activePlayer.accountBalance){
+                        SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
+                    }else {
+                        players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price;
+                        streets.get(selectedStreet.streetID-1/*?!*/).amountOfServers=0;
+                        streets.get(selectedStreet.streetID-1/*?!*/).datacenterExistent=true;
+                    }
+                }
+
+            }
+        }
     }
 }

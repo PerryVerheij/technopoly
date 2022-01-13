@@ -15,4 +15,5 @@ public class Straat {
     int datacenter = 0;
     int owner = 0;
     boolean buyable = true;
+    boolean mortgaged = false;
 }
