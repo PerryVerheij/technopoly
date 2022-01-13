@@ -390,11 +390,11 @@ public class Application implements Runnable {
         while(input<0||input>8) {
             input = SaxionApp.readInt();
         }
-        int amountstreets;
+        int amountStreets;
         if (input ==1||input==8){
-            amountstreets = 2;
+            amountStreets = 2;
         }else{
-            amountstreets = 3;
+            amountStreets = 3;
         }
         int ownedofgroup = 0;
         for (Straat street:streets) {
@@ -402,7 +402,7 @@ public class Application implements Runnable {
                 ownedofgroup++;
             }
         }
-        if(ownedofgroup!=amountstreets) {
+        if(ownedofgroup!=amountStreets) {
             SaxionApp.printLine("Je hebt niet alles van deze groep.");
             SaxionApp.printLine("Wil je opnieuw proberen?(Typ \"ja\" om opnieuw te proberen)");
             String stringinput = SaxionApp.readString();
@@ -436,14 +436,14 @@ public class Application implements Runnable {
                 if (street2.datacenterExistent) {
                     SaxionApp.printLine("straat 2 heeft een datacenter");
                 }
-                if (amountstreets == 3) {
+                if (amountStreets == 3) {
                     SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
                     if (street3.datacenterExistent) {
                         SaxionApp.printLine("straat 3 heeft een datacenter");
                     }
                 }
                 int streetinput = 0;
-                while (streetinput < 1 || streetinput >amountstreets) {
+                while (streetinput < 1 || streetinput >amountStreets) {
                     streetinput = SaxionApp.readInt();
                 }
                 switch (streetinput) {
@@ -455,7 +455,7 @@ public class Application implements Runnable {
                 if (selectedStreet.amountOfServers != 4 && !selectedStreet.datacenterExistent) {
                     SaxionApp.printLine("Hoeveel servers wil je bouwen op " + selectedStreet.name + "?(typ 0 om te stoppen)");
                     input = -1;
-                    while (input < 0 || input > 4 - selectedStreet.amountOfServers) {
+                    while (input <= 0 || input > 4 - selectedStreet.amountOfServers) {
                         input = SaxionApp.readInt();
                     }
                     if (price * input > activePlayer.accountBalance) {
@@ -508,17 +508,45 @@ public class Application implements Runnable {
                 if (street2.datacenterExistent) {
                     SaxionApp.printLine("straat 2 heeft een datacenter");
                 }
-                if (amountstreets == 3) {
+                if (amountStreets == 3) {
                     SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
                     if (street3.datacenterExistent) {
                         SaxionApp.printLine("straat 3 heeft een datacenter");
                     }
                 }
-                int streetinput = 0;
-                while (streetinput < 1 || streetinput > amountstreets) {
-                    streetinput = SaxionApp.readInt();
+                int streetInput = 0;
+                while (streetInput < 1 || streetInput > amountStreets) {
+                    streetInput = SaxionApp.readInt();
                 }
+                switch (streetInput) {
+                    case 1 -> selectedStreet = street1;
+                    case 2 -> selectedStreet = street2;
+                    case 3 -> selectedStreet = street3;
+                }
+                demolish();
             }
+        }
+    }
+    public void demolish(){
+        int payment = selectedStreet.serverPrice/2;
+        if (selectedStreet.datacenterExistent){
+            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + payment;
+            streets.get(selectedStreet.streetID - 1).amountOfServers = 4;
+            streets.get(selectedStreet.streetID - 1).datacenterExistent = false;
+            SaxionApp.printLine("Het datacenter is gesloopt, wil je ook nog servers slopen?(ja/nee)");
+            if (SaxionApp.readString().equalsIgnoreCase("ja")){
+                demolish();
+            }
+        }else if(selectedStreet.amountOfServers!=0){
+            SaxionApp.printLine("Hoeveel servers wil je slopen?");
+            int input =0;
+            while (input<0||input>selectedStreet.amountOfServers){
+                input=SaxionApp.readInt();
+            }
+            streets.get(selectedStreet.streetID - 1).amountOfServers =streets.get(selectedStreet.streetID - 1).amountOfServers-input;
+            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + payment*input;
+            SaxionApp.printLine("De servers zijn gesloopt.");
+            SaxionApp.pause();
         }
     }
 }
