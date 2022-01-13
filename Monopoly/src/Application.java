@@ -335,8 +335,9 @@ public class Application implements Runnable {
         SaxionApp.drawBorderedText("Kies een optie:",370,200,30);
         SaxionApp.drawBorderedText("1. Straten ruilen",370,230,30);
         SaxionApp.drawBorderedText("2. Servers/datacenters plaatsen",370,260,30);
-        SaxionApp.drawBorderedText("3. Hypotheek op straten",370,290,30);
-        SaxionApp.drawBorderedText("4. Beurt beëindigen",370,320,30);
+        SaxionApp.drawBorderedText("3. Servers/datacenters plaatsen",370,260,30);
+        SaxionApp.drawBorderedText("4. Hypotheek op straten",370,290,30);
+        SaxionApp.drawBorderedText("5. Beurt beëindigen",370,320,30);
     }
 
     public void checkTurnInput(){
@@ -347,12 +348,14 @@ public class Application implements Runnable {
             case '2':
                 printGroupMenu();
                 checkGroup();
-
                 break;
             case '3':
-                getMortgage();
+
                 break;
             case '4':
+                getMortgage();
+                break;
+            case '5':
                 updateActivePlayer();
                 break;
         }
