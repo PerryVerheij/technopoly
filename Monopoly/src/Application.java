@@ -188,7 +188,6 @@ public class Application implements Runnable {
             players.add(newPlayer);
             SaxionApp.clear();
         }
-
     }
 
     public Straat searchStreet() {
@@ -332,6 +331,34 @@ public class Application implements Runnable {
         players.get(selectedStreet.owner-1).accountBalance = players.get(selectedStreet.owner-1).accountBalance+interestAmount;
     }
 
+    public void swapProperties() {
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        // select property of activeplayer to swap
+        ArrayList<Straat> playerProperties = new ArrayList<>();
+        for(Straat street : streets) {
+            if(street.owner == activePlayer.playerID) {
+                playerProperties.add(street);
+            }
+        }
+        SaxionApp.printLine("Selecteer een straat:");
+        for (int i = 0; i < playerProperties.size(); i++) {
+            SaxionApp.print(i + 1 + ". ");
+            SaxionApp.printLine(playerProperties.get(i).name);
+        }
+        SaxionApp.printLine("Voer je keuze in: ");
+        int streetChoice = SaxionApp.readInt();
+        while (streetChoice < 1 || streetChoice > playerProperties.size()) {
+            SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
+            SaxionApp.printLine("Voer je keuze in: ");
+            streetChoice = SaxionApp.readInt();
+        }
+        // choose player to swap with
+
+        // choose player 2's property to swap with
+
+    }
+
     public void getMortgage() {
         SaxionApp.clear();
         drawMoneyPlayer();
@@ -397,7 +424,7 @@ public class Application implements Runnable {
         drawMoneyPlayer();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Kies een optie:",370,200,30);
-        SaxionApp.drawBorderedText("1. Straten ruilen",370,230,30);
+        SaxionApp.drawBorderedText("1. Eigendommen ruilen",370,230,30);
         SaxionApp.drawBorderedText("2. Servers/datacenters plaatsen",370,260,30);
         SaxionApp.drawBorderedText("3. Servers/datacenters slopen",370,290,30);
         SaxionApp.drawBorderedText("4. Hypotheek op straat nemen",370,320,30);
@@ -408,6 +435,7 @@ public class Application implements Runnable {
         char input = SaxionApp.readChar();
         switch (input){
             case '1':
+                swapProperties();
                 break;
             case '2':
                 printGroupMenu();
@@ -431,7 +459,7 @@ public class Application implements Runnable {
         drawMoneyPlayer();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Kies een optie:",370,200,30);
-        SaxionApp.drawBorderedText("1. Straten ruilen",370,230,30);
+        SaxionApp.drawBorderedText("1. Eigendommen ruilen",370,230,30);
         SaxionApp.drawBorderedText("2. Servers/datacenters plaatsen",370,260,30);
         SaxionApp.drawBorderedText("3. Servers/datacenters slopen",370,290,30);
         SaxionApp.drawBorderedText("4. Hypotheek op straat nemen",370,320,30);
@@ -443,6 +471,7 @@ public class Application implements Runnable {
         char input = SaxionApp.readChar();
         switch (input){
             case '1':
+                swapProperties();
                 break;
             case '2':
                 printGroupMenu();
