@@ -64,8 +64,13 @@ public class Application implements Runnable {
                 payInterest();
             }
             while(!nextTurn) {
-                showTurnMenu();
-                checkTurnInput();
+                if(checkForMortgage()) {
+                    showMortgageTurnMenu();
+                    checkMortgageTurnInput();
+                } else {
+                    showTurnMenu();
+                    checkTurnInput();
+                }
             }
         }
     }
@@ -91,7 +96,6 @@ public class Application implements Runnable {
             SaxionApp.drawBorderedText("¤" + players.get(n).accountBalance, 85 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 11, 20);
             SaxionApp.turnBorderOn();
         }
-        SaxionApp.readChar();
     }
 
     public void initializeStreets() {
@@ -273,7 +277,6 @@ public class Application implements Runnable {
                 SaxionApp.printLine(Card.code);
             }
         }
-
     }
 
     public void checkSelectedCard(){
@@ -330,9 +333,63 @@ public class Application implements Runnable {
     }
 
     public void getMortgage() {
-        Straat mortgagedStreet = null;
-        mortgagedStreet = searchStreet();
-        
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        Straat mortgagedStreet = searchStreet();
+        if(mortgagedStreet.mortgaged) {
+            SaxionApp.print("Deze straat heeft al een hypotheek!");
+            SaxionApp.pause();
+        } else if(mortgagedStreet.amountOfServers != 0 || mortgagedStreet.datacenterExistent) {
+            SaxionApp.printLine("Je straat moet onbebouwd zijn voor een hypotheek!");
+            SaxionApp.pause();
+        } else if (mortgagedStreet.owner == activePlayer.playerID) {
+            players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance + mortgagedStreet.mortgage;
+            streets.get(mortgagedStreet.streetID-1).mortgaged = true;
+            SaxionApp.print("Er is " + mortgagedStreet.mortgage + " toegevoegd aan je geld.");
+            SaxionApp.pause();
+        } else {
+            SaxionApp.print("Deze straat is niet in jouw bezit.");
+            SaxionApp.pause();
+        }
+    }
+
+    public void payMortgage() {
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        ArrayList<Straat> mortgagedStreets = new ArrayList<>();
+        SaxionApp.setFill(Color.white);
+        //SaxionApp.drawBorderedText("Voer de naam van de straat in: ", 200, 200, 38);
+        for (Straat street : streets) {
+            if (street.owner == activePlayer.playerID && street.mortgaged) {
+                mortgagedStreets.add(street);
+            }
+        }
+        for (int i = 0; i < mortgagedStreets.size(); i++) {
+            SaxionApp.print(i + 1 + ". ");
+            SaxionApp.printLine(mortgagedStreets.get(i).name);
+        }
+        SaxionApp.printLine("Voer je keuze in: ");
+        int streetChoice = SaxionApp.readInt();
+        while (streetChoice < 1 || streetChoice > mortgagedStreets.size()) {
+            SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
+            SaxionApp.printLine("Voer je keuze in: ");
+            streetChoice = SaxionApp.readInt();
+        }
+        Straat resultStreet = mortgagedStreets.get(streetChoice-1);
+        players.get(activePlayer.playerID-1).accountBalance = (int) (players.get(activePlayer.playerID-1).accountBalance - (resultStreet.mortgage*1.1));
+        streets.get(resultStreet.streetID-1).mortgaged = false;
+        SaxionApp.print("Je hebt de bank " + resultStreet.mortgage*1.1 + " betaald.");
+        SaxionApp.pause();
+    }
+
+    public boolean checkForMortgage() {
+        boolean hasMortgage = false;
+        for(Straat street : streets) {
+            if(street.owner == activePlayer.playerID && street.mortgaged) {
+                hasMortgage = true;
+            }
+        }
+        return hasMortgage;
     }
 
     public void showTurnMenu() {
@@ -343,7 +400,7 @@ public class Application implements Runnable {
         SaxionApp.drawBorderedText("1. Straten ruilen",370,230,30);
         SaxionApp.drawBorderedText("2. Servers/datacenters plaatsen",370,260,30);
         SaxionApp.drawBorderedText("3. Servers/datacenters slopen",370,290,30);
-        SaxionApp.drawBorderedText("4. Hypotheek op straten",370,320,30);
+        SaxionApp.drawBorderedText("4. Hypotheek op straat nemen",370,320,30);
         SaxionApp.drawBorderedText("5. Beurt beëindigen",370,350,30);
     }
 
@@ -369,6 +426,44 @@ public class Application implements Runnable {
         }
     }
 
+    public void showMortgageTurnMenu() {
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        SaxionApp.setFill(Color.white);
+        SaxionApp.drawBorderedText("Kies een optie:",370,200,30);
+        SaxionApp.drawBorderedText("1. Straten ruilen",370,230,30);
+        SaxionApp.drawBorderedText("2. Servers/datacenters plaatsen",370,260,30);
+        SaxionApp.drawBorderedText("3. Servers/datacenters slopen",370,290,30);
+        SaxionApp.drawBorderedText("4. Hypotheek op straat nemen",370,320,30);
+        SaxionApp.drawBorderedText("5. Hypotheek afbetalen",370,350,30);
+        SaxionApp.drawBorderedText("6. Beurt beëindigen",370,380,30);
+    }
+
+    public void checkMortgageTurnInput(){
+        char input = SaxionApp.readChar();
+        switch (input){
+            case '1':
+                break;
+            case '2':
+                printGroupMenu();
+                checkGroup(false);
+                break;
+            case '3':
+                printGroupMenu();
+                checkGroup(true);
+                break;
+            case '4':
+                getMortgage();
+                break;
+            case '5':
+                payMortgage();
+                break;
+            case '6':
+                updateActivePlayer();
+                break;
+        }
+    }
+
     public void updateActivePlayer() {
         if (activePlayer.playerID<amountOfPlayers){
             activePlayer = players.get(activePlayer.playerID);
@@ -378,10 +473,9 @@ public class Application implements Runnable {
         nextTurn = true;
     }
 
-    public void printGroupMenu(){
-        for (int i =0;i<5;i++){
-            SaxionApp.removeLastDraw();
-        }
+    public void printGroupMenu() {
+        SaxionApp.clear();
+        drawMoneyPlayer();
         SaxionApp.printLine("1. Donkerblauw");
         SaxionApp.printLine("2. Lichtgrijs");
         SaxionApp.printLine("3. Paars");
@@ -394,31 +488,38 @@ public class Application implements Runnable {
 
     public void checkGroup(boolean demolish){
         int input = 9;
-        while(input<0||input>8) {
+        boolean groupMortgaged = false;
+
+        while(input<0 || input>8) {
             input = SaxionApp.readInt();
         }
-        int amountStreets;
-        if (input ==1||input==8){
-            amountStreets = 2;
+        int amountOfStreets;
+        if (input ==1 || input==8){
+            amountOfStreets = 2;
         }else{
-            amountStreets = 3;
+            amountOfStreets = 3;
         }
-        int ownedofgroup = 0;
-        for (Straat street:streets) {
-            if (street.owner == activePlayer.playerID&&street.group==input) {
-                ownedofgroup++;
+        int ownedOfGroup = 0;
+        for (Straat street : streets) {
+            if(street.owner == activePlayer.playerID && street.group == input) {
+                ownedOfGroup++;
+            }
+            if(street.group == input && street.mortgaged) {
+                groupMortgaged = true;
             }
         }
-        if(ownedofgroup!=amountStreets) {
+
+        if(ownedOfGroup != amountOfStreets) {
             SaxionApp.printLine("Je hebt niet alles van deze groep.");
             SaxionApp.printLine("Wil je opnieuw proberen?(Typ \"ja\" om opnieuw te proberen)");
-            String stringinput = SaxionApp.readString();
-            if(stringinput.equalsIgnoreCase("ja")){
+            String stringInput = SaxionApp.readString();
+            if(stringInput.equalsIgnoreCase("ja")) {
                 printGroupMenu();
                 checkGroup(demolish);
+                //TODO: bug fixen? demolish standaard op ja
             }
-        }else{
-            if (!demolish) {
+        } else {
+            if(!demolish && !groupMortgaged) {
                 SaxionApp.printLine("Kies de straat waarop je wil bouwen.");
                 Straat street1 = streets.get(0);
                 Straat street2 = streets.get(0);
@@ -443,14 +544,14 @@ public class Application implements Runnable {
                 if (street2.datacenterExistent) {
                     SaxionApp.printLine("straat 2 heeft een datacenter");
                 }
-                if (amountStreets == 3) {
+                if (amountOfStreets == 3) {
                     SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
                     if (street3.datacenterExistent) {
                         SaxionApp.printLine("straat 3 heeft een datacenter");
                     }
                 }
                 int streetinput = 0;
-                while (streetinput < 1 || streetinput >amountStreets) {
+                while (streetinput < 1 || streetinput >amountOfStreets) {
                     streetinput = SaxionApp.readInt();
                 }
                 switch (streetinput) {
@@ -490,7 +591,16 @@ public class Application implements Runnable {
                     SaxionApp.printLine("Dit heeft al een datacenter, kies sloop servers om dit af te breken");
                     SaxionApp.pause();
                 }
-            }else{
+            } else if(!demolish && groupMortgaged) {
+                SaxionApp.printLine("Je hebt een hypotheek op een of meerdere straten in deze groep. Probeer een andere groep.");
+                SaxionApp.printLine("Wil je opnieuw proberen?(Typ \"ja\" om opnieuw te proberen)");
+                String stringInput = SaxionApp.readString();
+                if(stringInput.equalsIgnoreCase("ja")) {
+                    printGroupMenu();
+                    checkGroup(demolish);
+                    //TODO: bug fixen? demolish standaard op ja
+                }
+            } else {
                 SaxionApp.printLine("Kies de straat waar je wil slopen.");
                 Straat street1 = streets.get(0);
                 Straat street2 = streets.get(0);
@@ -515,14 +625,14 @@ public class Application implements Runnable {
                 if (street2.datacenterExistent) {
                     SaxionApp.printLine("straat 2 heeft een datacenter");
                 }
-                if (amountStreets == 3) {
+                if (amountOfStreets == 3) {
                     SaxionApp.printLine("straat 3 heeft: " + street3.amountOfServers);
                     if (street3.datacenterExistent) {
                         SaxionApp.printLine("straat 3 heeft een datacenter");
                     }
                 }
                 int streetInput = 0;
-                while (streetInput < 1 || streetInput > amountStreets) {
+                while (streetInput < 1 || streetInput > amountOfStreets) {
                     streetInput = SaxionApp.readInt();
                 }
                 switch (streetInput) {
@@ -534,6 +644,7 @@ public class Application implements Runnable {
             }
         }
     }
+
     public void demolish(){
         int payment = selectedStreet.serverPrice/2;
         if (selectedStreet.datacenterExistent){
