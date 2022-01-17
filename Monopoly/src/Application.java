@@ -60,6 +60,17 @@ public class Application implements Runnable {
             } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
                 searchCards();
                 checkSelectedCard();
+            } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
+                activePlayer.jailcount++;
+                if (activePlayer.jailcount==3){
+                    activePlayer.accountBalance=activePlayer.accountBalance-50;
+                    SaxionApp.printLine("Er is 50 van je rekening afgeschreven vanwege de ransomware");
+                    SaxionApp.pause();
+                }
+            } else if(selectedStreet.name.equalsIgnoreCase("naar ransomware!")){
+                activePlayer.jail=true;
+            } else if(selectedStreet.name.equalsIgnoreCase("start")){
+                activePlayer.accountBalance= activePlayer.accountBalance+200;
             }else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID){
                 payInterest();
             }
