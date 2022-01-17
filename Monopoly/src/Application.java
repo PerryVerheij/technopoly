@@ -328,7 +328,9 @@ public class Application implements Runnable {
             case 4 -> interestAmount = selectedStreet.server4;
         }
         players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance-interestAmount;
-        players.get(selectedStreet.owner-1).accountBalance = players.get(selectedStreet.owner-1).accountBalance+interestAmount;
+        if (selectedStreet.owner!=0) {
+            players.get(selectedStreet.owner - 1).accountBalance = players.get(selectedStreet.owner - 1).accountBalance + interestAmount;
+        }
     }
 
     public void swapProperties() {
