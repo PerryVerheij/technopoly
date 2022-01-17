@@ -62,13 +62,31 @@ public class Application implements Runnable {
                 checkSelectedCard();
             } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
                 activePlayer.jailcount++;
+                SaxionApp.printLine("Wil je jezelf vrij kopen?");
+                SaxionApp.printLine("1. ja(-50)");
+                SaxionApp.printLine("2. nee, ik wil verder dobbelen");
+                SaxionApp.printLine("3. ik wil een pas gebruiken");
+                int input =0;
+                while(input<1||input>3){
+                    input =SaxionApp.readInt();
+                }
+                switch (input){
+                    case 1:
+                        activePlayer.accountBalance = activePlayer.accountBalance - 50;
+                    case 3:
+                        activePlayer.jail=false;
+                        activePlayer.jailcount=0;
+                }
                 if (activePlayer.jailcount==3){
                     activePlayer.accountBalance=activePlayer.accountBalance-50;
+                    activePlayer.jail=false;
+                    activePlayer.jailcount=0;
                     SaxionApp.printLine("Er is 50 van je rekening afgeschreven vanwege de ransomware");
                     SaxionApp.pause();
                 }
             } else if(selectedStreet.name.equalsIgnoreCase("naar ransomware!")){
                 activePlayer.jail=true;
+                activePlayer.jailcount=0;
             } else if(selectedStreet.name.equalsIgnoreCase("start")){
                 activePlayer.accountBalance= activePlayer.accountBalance+200;
             }else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID){
