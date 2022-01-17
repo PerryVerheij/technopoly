@@ -330,6 +330,9 @@ public class Application implements Runnable {
                 }
             }
             players.get(activePlayer.playerID-1).accountBalance+=placedHouses*Integer.parseInt(selectedCard.geld)+placedHotels*Integer.parseInt(selectedCard.geld2);
+        }else if(selectedCard.code.equalsIgnoreCase("ransom")) {
+            activePlayer.jail=true;
+            activePlayer.jailcount = 0;
         }else if(selectedCard.code.charAt(0) == 'a'||selectedCard.code.charAt(0) == 'k'||selectedCard.code.equals("start")) {
             players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.geld);
         }
