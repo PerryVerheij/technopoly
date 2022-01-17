@@ -378,7 +378,7 @@ public class Application implements Runnable {
         Straat resultStreet = mortgagedStreets.get(streetChoice-1);
         players.get(activePlayer.playerID-1).accountBalance = (int) (players.get(activePlayer.playerID-1).accountBalance - (resultStreet.mortgage*1.1));
         streets.get(resultStreet.streetID-1).mortgaged = false;
-        SaxionApp.print("Je hebt de bank " + resultStreet.mortgage*1.1 + " betaald.");
+        SaxionApp.print("Je hebt de bank " + (int)(resultStreet.mortgage*1.1) + " betaald.");
         SaxionApp.pause();
     }
 
@@ -516,7 +516,7 @@ public class Application implements Runnable {
             if(stringInput.equalsIgnoreCase("ja")) {
                 printGroupMenu();
                 checkGroup(demolish);
-                //TODO: bug fixen? demolish standaard op ja
+                //TODO: bug fixen? demolish standaard op ja, werkt volgens mij
             }
         } else {
             if(!demolish && !groupMortgaged) {
