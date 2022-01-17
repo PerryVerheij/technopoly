@@ -217,8 +217,15 @@ public class Application implements Runnable {
             newPlayer.playerID = i;
             SaxionApp.removeLastDraw();
             SaxionApp.removeLastPrint();
-            SaxionApp.drawBorderedText("Enter name for player "+i,300,0,36);
-            newPlayer.playerName = SaxionApp.readString();
+            SaxionApp.drawBorderedText("Naam van speler "+i,300,0,36);
+            while (newPlayer.playerName.isBlank()) {
+                newPlayer.playerName = SaxionApp.readString();
+                if (newPlayer.playerName.isBlank()){
+                    SaxionApp.removeLastPrint();
+                    SaxionApp.removeLastPrint();
+                    SaxionApp.printLine("Je moet een naam invoeren");
+                }
+            }
             players.add(newPlayer);
             SaxionApp.clear();
         }
