@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 public class Application implements Runnable {
-
+//kaarten worden gepakt bij gevangenis, crack en zo
     public static void main(String[] args) {
         SaxionApp.start(new Application(), 1000, 700);
     }
