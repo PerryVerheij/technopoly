@@ -70,6 +70,7 @@ public class Application implements Runnable {
                     auction();
                 }
             } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
+                SaxionApp.pause();
                 searchCards();
                 checkSelectedCard();
             } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
@@ -294,18 +295,18 @@ public class Application implements Runnable {
             streetChoice = SaxionApp.readInt();
         }
         for (Straat street : streets) {
-            if (matchingStreets.get(streetChoice-1).streetID == street.streetID) {
-                SaxionApp.printLine(street.name);
+            if (matchingStreets.get(streetChoice-1).name.equalsIgnoreCase(street.name)) {
                 resultStreet = street;
             }
+
         }
+
         SaxionApp.clear();
         drawMoneyPlayer();
         return resultStreet;
     }
 
     public void searchCards(){
-        SaxionApp.removeLastDraw();
         ArrayList<Card> matchingCards = new ArrayList<>();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Voer de code van de kaart in: ", 200, 200, 38);
