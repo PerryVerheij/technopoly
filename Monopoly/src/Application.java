@@ -2,7 +2,9 @@ import nl.saxion.app.CsvReader;
 import nl.saxion.app.SaxionApp;
 
 import java.awt.*;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class Application implements Runnable {
@@ -56,10 +58,42 @@ public class Application implements Runnable {
                 }
                 if(buyChoice.equalsIgnoreCase("ja")) {
                     buyStreet();
+                }else{
+                    auctionprint();
+                    auction();
                 }
             } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
                 searchCards();
                 checkSelectedCard();
+            } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
+                activePlayer.jailcount++;
+                SaxionApp.printLine("Wil je jezelf vrij kopen?");
+                SaxionApp.printLine("1. ja(-50)");
+                SaxionApp.printLine("2. nee, ik wil verder dobbelen");
+                SaxionApp.printLine("3. ik wil een pas gebruiken");
+                int input =0;
+                while(input<1||input>3){
+                    input =SaxionApp.readInt();
+                }
+                switch (input){
+                    case 1:
+                        activePlayer.accountBalance = activePlayer.accountBalance - 50;
+                    case 3:
+                        activePlayer.jail=false;
+                        activePlayer.jailcount=0;
+                }
+                if (activePlayer.jailcount==3){
+                    activePlayer.accountBalance=activePlayer.accountBalance-50;
+                    activePlayer.jail=false;
+                    activePlayer.jailcount=0;
+                    SaxionApp.printLine("Er is 50 van je rekening afgeschreven vanwege de ransomware");
+                    SaxionApp.pause();
+                }
+            } else if(selectedStreet.name.equalsIgnoreCase("naar ransomware!")){
+                activePlayer.jail=true;
+                activePlayer.jailcount=0;
+            } else if(selectedStreet.name.equalsIgnoreCase("start")){
+                activePlayer.accountBalance= activePlayer.accountBalance+200;
             }else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID){
                 payInterest();
             }
@@ -183,8 +217,15 @@ public class Application implements Runnable {
             newPlayer.playerID = i;
             SaxionApp.removeLastDraw();
             SaxionApp.removeLastPrint();
-            SaxionApp.drawBorderedText("Enter name for player "+i,300,0,36);
-            newPlayer.playerName = SaxionApp.readString();
+            SaxionApp.drawBorderedText("Naam van speler "+i,300,0,36);
+            while (newPlayer.playerName.isBlank()) {
+                newPlayer.playerName = SaxionApp.readString();
+                if (newPlayer.playerName.isBlank()){
+                    SaxionApp.removeLastPrint();
+                    SaxionApp.removeLastPrint();
+                    SaxionApp.printLine("Je moet een naam invoeren");
+                }
+            }
             players.add(newPlayer);
             SaxionApp.clear();
         }
@@ -298,6 +339,9 @@ public class Application implements Runnable {
                 }
             }
             players.get(activePlayer.playerID-1).accountBalance+=placedHouses*Integer.parseInt(selectedCard.geld)+placedHotels*Integer.parseInt(selectedCard.geld2);
+        }else if(selectedCard.code.equalsIgnoreCase("ransom")) {
+            activePlayer.jail=true;
+            activePlayer.jailcount = 0;
         }else if(selectedCard.code.charAt(0) == 'a'||selectedCard.code.charAt(0) == 'k'||selectedCard.code.equals("start")) {
             players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.geld);
         }
@@ -816,5 +860,49 @@ public class Application implements Runnable {
             SaxionApp.printLine("De servers zijn gesloopt.");
             SaxionApp.pause();
         }
+    }
+    public void auction() {
+        ArrayList<Speler> bidPlayers = new ArrayList<>();
+        for (Speler player : players) {
+            Speler bidPlayer;
+            bidPlayer = player;
+            bidPlayers.add(bidPlayer);
+        }
+        Speler auctionActivePlayer = activePlayer;
+        int highestBid = selectedStreet.value / 2;
+        int i = 0;
+        while (bidPlayers.size() > 1) {
+
+            int bid = 1000000000;
+            while (bid > auctionActivePlayer.accountBalance) {
+                SaxionApp.print(auctionActivePlayer.playerName+":");
+                bid = SaxionApp.readInt();
+                if (bid <= highestBid) {
+                    bidPlayers.remove(auctionActivePlayer);
+                    i--;
+                    SaxionApp.printLine("Doordat het lager was dan het hoogste bod ben je uit de veiling gezet.");
+                } else if (bid > auctionActivePlayer.accountBalance) {
+                    SaxionApp.printLine("Dit bod is hoger dan waar je geld voor hebt, probeer opnieuw");
+                } else{
+                    highestBid = bid;
+                }
+            }
+            if (i+1<bidPlayers.size()){
+                i++;
+                auctionActivePlayer = bidPlayers.get(i);
+            }else{
+                i=0;
+                auctionActivePlayer = bidPlayers.get(0);
+            }
+
+        }
+        selectedStreet.owner = bidPlayers.get(0).playerID;
+        players.get(selectedStreet.owner-1).accountBalance=players.get(selectedStreet.owner-1).accountBalance-highestBid;
+    }
+    public void auctionprint(){
+        SaxionApp.print("                                ");
+        SaxionApp.printLine("Veiling van "+selectedStreet.name);
+        SaxionApp.print("                                ");
+        SaxionApp.printLine("start bedrag:"+selectedStreet.value/2);
     }
 }
