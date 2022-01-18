@@ -30,11 +30,15 @@ public class Application implements Runnable {
         initializeCards();
         //choose player
         SaxionApp.turnBorderOff();
-        SaxionApp.drawBorderedText("Kies het aantal spelers (2-4).",175,0,36);
+        SaxionApp.drawBorderedText("Kies het aantal spelers (2-4):",200,200,38);
+        positionInput(11);
         amountOfPlayers = SaxionApp.readInt();
         while(amountOfPlayers<2||amountOfPlayers>4) {
-            SaxionApp.removeLastPrint();
-            SaxionApp.printLine("Er mogen 2-4 spelers meedoen. Probeer het opnieuw.",Color.red);
+            SaxionApp.clear();
+            SaxionApp.drawBorderedText("Kies het aantal spelers (2-4):",200,200,38);
+            SaxionApp.drawBorderedText("Er mogen 2 tot 4 spelers meedoen.",200,250,30);
+            SaxionApp.drawBorderedText("Probeer het opnieuw.",200,280,30);
+            positionInput(15);
             amountOfPlayers = SaxionApp.readInt();
         }
         initializePlayers(amountOfPlayers);
@@ -50,10 +54,14 @@ public class Application implements Runnable {
             //game
             selectedStreet = searchStreet();
             if(selectedStreet.buyable) {
-                SaxionApp.print("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ");
+                SaxionApp.drawBorderedText("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ",200,200,30);
+                positionInput(11);
                 String buyChoice = SaxionApp.readString();
                 while(!buyChoice.equalsIgnoreCase("ja") && !buyChoice.equalsIgnoreCase("nee")) {
-                    SaxionApp.print("Voer een geldig antwoord in (ja of nee): ");
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+                    SaxionApp.drawBorderedText("Voer een geldig antwoord in (ja of nee): ",200,200,30);
+                    positionInput(11);
                     buyChoice = SaxionApp.readString();
                 }
                 if(buyChoice.equalsIgnoreCase("ja")) {
@@ -86,7 +94,7 @@ public class Application implements Runnable {
                     activePlayer.accountBalance=activePlayer.accountBalance-50;
                     activePlayer.jail=false;
                     activePlayer.jailcount=0;
-                    SaxionApp.printLine("Er is 50 van je rekening afgeschreven vanwege de ransomware");
+                    SaxionApp.printLine("Er is 50 van je rekening afgeschreven vanwege de ransomware.");
                     SaxionApp.pause();
                 }
             } else if(selectedStreet.name.equalsIgnoreCase("naar ransomware!")){
@@ -130,6 +138,7 @@ public class Application implements Runnable {
             SaxionApp.drawBorderedText("¤" + players.get(n).accountBalance, 85 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 11, 20);
             SaxionApp.turnBorderOn();
         }
+        SaxionApp.setFill(Color.white);
     }
 
     public void initializeStreets() {
@@ -215,15 +224,15 @@ public class Application implements Runnable {
         for (int i = 1; i<=inputPlayer;i++){
             Speler newPlayer = new Speler();
             newPlayer.playerID = i;
-            SaxionApp.removeLastDraw();
-            SaxionApp.removeLastPrint();
-            SaxionApp.drawBorderedText("Naam van speler "+i,300,0,36);
+            SaxionApp.clear();
+            SaxionApp.drawBorderedText("Naam van speler " + i + ":",200,200,38);
             while (newPlayer.playerName.isBlank()) {
+                positionInput(11);
                 newPlayer.playerName = SaxionApp.readString();
                 while (newPlayer.playerName.isBlank()){
-                    SaxionApp.removeLastPrint();
-                    SaxionApp.removeLastPrint();
-                    SaxionApp.printLine("Je moet een naam invoeren.");
+                    SaxionApp.clear();
+                    SaxionApp.drawBorderedText("Je moet een naam invoeren.",200,200,38);
+                    positionInput(11);
                     newPlayer.playerName = SaxionApp.readString();
                 }
             }
@@ -232,15 +241,19 @@ public class Application implements Runnable {
         }
     }
 
+    public void positionInput(int amountOfWhiteLines) {
+        for (int i = 0; i < amountOfWhiteLines; i++) {
+            SaxionApp.printLine();
+        }
+        SaxionApp.print("                                                  ");
+    }
+
     public Straat searchStreet() {
         Straat resultStreet = null;
         ArrayList<Straat> matchingStreets = new ArrayList<>();
         SaxionApp.setFill(Color.white);
         SaxionApp.drawBorderedText("Voer de naam van de straat in: ", 200, 200, 38);
-        for(int i=0;i<11;i++) {
-            SaxionApp.printLine();
-        }
-        SaxionApp.print("                                                  ");
+        positionInput(11);
         String userInput = SaxionApp.readString();
         for (Straat street : streets) {
             if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
@@ -248,7 +261,12 @@ public class Application implements Runnable {
             }
         }
         while (matchingStreets.size() == 0) {
-            SaxionApp.printLine("Er zijn geen straten gevonden. Probeer het opnieuw.");
+            SaxionApp.clear();
+            drawMoneyPlayer();
+
+            SaxionApp.drawBorderedText("Voer de naam van de straat in: ", 200, 200, 38);
+            SaxionApp.drawBorderedText("Er zijn geen straten gevonden. Probeer het opnieuw.",200,250,30);
+            positionInput(13);
             userInput = SaxionApp.readString();
             for (Straat street : streets) {
                 if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
@@ -256,15 +274,24 @@ public class Application implements Runnable {
                 }
             }
         }
+        SaxionApp.clear();
+        drawMoneyPlayer();
         for (int i = 0; i < matchingStreets.size(); i++) {
-            SaxionApp.print(i + 1 + ". ");
-            SaxionApp.printLine(matchingStreets.get(i).name);
+            SaxionApp.drawBorderedText(i+1 + ". " + matchingStreets.get(i).name,300,275+20*i,20);
         }
-        SaxionApp.printLine("Voer je keuze in: ");
+        SaxionApp.drawBorderedText("Voer je keuze in: ",300,150,38);
+        positionInput(9);
         int streetChoice = SaxionApp.readInt();
         while (streetChoice < 1 || streetChoice > matchingStreets.size()) {
-            SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
-            SaxionApp.printLine("Voer je keuze in: ");
+            SaxionApp.clear();
+            drawMoneyPlayer();
+            for (int i = 0; i < matchingStreets.size(); i++) {
+                SaxionApp.drawBorderedText(i+1 + ". " + matchingStreets.get(i).name,300,275+20*i,20);
+            }
+
+            SaxionApp.drawBorderedText("Voer je keuze in: ",300,150,38);
+            SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",300,200,30);
+            positionInput(11);
             streetChoice = SaxionApp.readInt();
         }
         for (Straat street : streets) {
@@ -273,6 +300,8 @@ public class Application implements Runnable {
                 resultStreet = street;
             }
         }
+        SaxionApp.clear();
+        drawMoneyPlayer();
         return resultStreet;
     }
 
