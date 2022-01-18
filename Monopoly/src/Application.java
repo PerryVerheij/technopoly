@@ -347,16 +347,16 @@ public class Application implements Runnable {
     }
 
     public void checkSelectedCard(){
-        if (selectedCard.code.equals("a7")){
+        if (selectedCard.code.equals("a7")) {
             for (Speler player:players){
                 if (player.playerID!=activePlayer.playerID){
                     player.accountBalance-=10;
-                }else{
+                } else {
                     player.accountBalance+=10*(amountOfPlayers-1);
                 }
             }
-        }else if (selectedCard.code.equals("k1")||selectedCard.code.equals("k8")){
-            SaxionApp.printLine(selectedCard.geld+" wordt betaald voor servers en "+selectedCard.geld2+ " wordt betaald voor datacentra.");
+        } else if (selectedCard.code.equals("k1") || selectedCard.code.equals("k8")) {
+            SaxionApp.printLine(selectedCard.geld + " wordt betaald voor servers en " + selectedCard.geld2 + " wordt betaald voor datacentra.");
             SaxionApp.pause();
             int placedHouses =0;
             int placedHotels =0;
