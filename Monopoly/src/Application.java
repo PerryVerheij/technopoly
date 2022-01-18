@@ -427,101 +427,107 @@ public class Application implements Runnable {
                 SaxionApp.print(i + 1 + ". ");
                 SaxionApp.printLine(player1Properties.get(i).name);
             }
-            SaxionApp.printLine("Voer je keuze in: ");
+            SaxionApp.printLine("Voer je keuze in (0 om te stoppen): ");
             int streetChoice1 = SaxionApp.readInt()-1;
-            while (streetChoice1 < 0 || streetChoice1 > player1Properties.size()-1) {
+            while (streetChoice1 < -1 || streetChoice1 > player1Properties.size()-1) {
                 SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
                 SaxionApp.printLine("Voer je keuze in: ");
                 streetChoice1 = SaxionApp.readInt()-1;
             }
-            for (Straat street : streets) {
-                if (player1Properties.get(streetChoice1).streetID == street.streetID) {
-                    SaxionApp.printLine("Je hebt " + street.name + " gekozen.");
-                    player1Property = street;
+            if(streetChoice1 != -1) {
+                for (Straat street : streets) {
+                    if (player1Properties.get(streetChoice1).streetID == street.streetID) {
+                        SaxionApp.printLine("Je hebt " + street.name + " gekozen.");
+                        player1Property = street;
+                    }
                 }
-            }
-            SaxionApp.pause();
-
-            // choose player to swap with
-            SaxionApp.clear();
-            drawMoneyPlayer();
-
-            SaxionApp.printLine("Met welke speler wil je " + player1Property.name + " ruilen?");
-            for(int i=0;i<players.size();i++) {
-                if(players.get(i).playerID != activePlayer.playerID) {
-                    SaxionApp.print(i+1 + ". ");
-                    SaxionApp.printLine(players.get(i).playerName);
-                }
-            }
-            SaxionApp.print("Voer het nummer van de speler in: ");
-            int intPlayer = SaxionApp.readInt()-1;
-            while(intPlayer < 0 || intPlayer > players.size()-1) {
-                SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
-                SaxionApp.printLine("Voer je keuze in: ");
-                intPlayer = SaxionApp.readInt()-1;
-            }
-            Speler chosenPlayer = players.get(intPlayer);
-
-            // check whether chosen player has properties
-            for(Straat street : streets) {
-                if(street.owner == chosenPlayer.playerID) {
-                    player2Properties.add(street);
-                }
-            }
-            if(player2Properties.size() == 0) {
-                SaxionApp.printLine("Deze speler heeft geen bezittingen! De ruil wordt afgebroken.");
                 SaxionApp.pause();
-            } else {
-                SaxionApp.printLine("Je hebt " + chosenPlayer.playerName + " gekozen om mee te ruilen.");
-                SaxionApp.pause();
+
+                // choose player to swap with
                 SaxionApp.clear();
                 drawMoneyPlayer();
-                SaxionApp.printLine("Selecteer een bezit:");
-                for (int i=0;i<player2Properties.size();i++) {
-                    SaxionApp.print(i+1 + ". ");
-                    SaxionApp.printLine(player2Properties.get(i).name);
+
+                SaxionApp.printLine("Met welke speler wil je " + player1Property.name + " ruilen?");
+                for (int i = 0; i < players.size(); i++) {
+                    if (players.get(i).playerID != activePlayer.playerID) {
+                        SaxionApp.print(i + 1 + ". ");
+                        SaxionApp.printLine(players.get(i).playerName);
+                    }
                 }
-                SaxionApp.printLine("Voer je keuze in: ");
-                int streetChoice2 = SaxionApp.readInt()-1;
-                while (streetChoice2 < 0 || streetChoice2 > player2Properties.size()-1) {
+                SaxionApp.print("Voer het nummer van de speler in (0 om te stoppen): ");
+                int intPlayer = SaxionApp.readInt() - 1;
+                while (intPlayer < -1 || intPlayer > players.size() - 1) {
                     SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
                     SaxionApp.printLine("Voer je keuze in: ");
-                    streetChoice2 = SaxionApp.readInt()-1;
+                    intPlayer = SaxionApp.readInt() - 1;
                 }
-                for (Straat street : streets) {
-                    if (player2Properties.get(streetChoice2).streetID == street.streetID) {
-                        SaxionApp.printLine("Je hebt " + street.name + " gekozen.");
-                        player2Property = street;
-                    }
-                }
-                SaxionApp.pause();
+                if (intPlayer != -1) {
+                    Speler chosenPlayer = players.get(intPlayer);
 
-                if(player1Property.mortgaged) {
-                    SaxionApp.printLine(player1Property.name + " heeft een hypotheek van " + (int)(player1Property.mortgage*1.1) + " (incl. rente).");
-                    SaxionApp.printLine("Als jullie akkoord gaan, neemt " + chosenPlayer.playerName + " deze hypotheek over.");
-                    SaxionApp.print("Gaan jullie akkoord? (ja of nee)? ");
-                    String swapChoice = SaxionApp.readString();
-                    while(!swapChoice.equalsIgnoreCase("ja") && !swapChoice.equalsIgnoreCase("nee")) {
-                        SaxionApp.print("Voer een geldig antwoord in (ja of nee): ");
-                        swapChoice = SaxionApp.readString();
+                    // check whether chosen player has properties
+                    for (Straat street : streets) {
+                        if (street.owner == chosenPlayer.playerID) {
+                            player2Properties.add(street);
+                        }
                     }
-                    if (swapChoice.equalsIgnoreCase("ja")) {
-                        swapProperties(player1Property, player2Property, chosenPlayer);
+                    if (player2Properties.size() == 0) {
+                        SaxionApp.printLine("Deze speler heeft geen bezittingen! De ruil wordt afgebroken.");
+                        SaxionApp.pause();
+                    } else {
+                        SaxionApp.printLine("Je hebt " + chosenPlayer.playerName + " gekozen om mee te ruilen.");
+                        SaxionApp.pause();
+                        SaxionApp.clear();
+                        drawMoneyPlayer();
+                        SaxionApp.printLine("Selecteer een bezit (0 om te stoppen): ");
+                        for (int i = 0; i < player2Properties.size(); i++) {
+                            SaxionApp.print(i + 1 + ". ");
+                            SaxionApp.printLine(player2Properties.get(i).name);
+                        }
+                        SaxionApp.printLine("Voer je keuze in: ");
+                        int streetChoice2 = SaxionApp.readInt() - 1;
+                        while (streetChoice2 < -1 || streetChoice2 > player2Properties.size()-1) {
+                            SaxionApp.printLine("Dit is geen optie. Probeer het opnieuw.");
+                            SaxionApp.printLine("Voer je keuze in: ");
+                            streetChoice2 = SaxionApp.readInt()-1;
+                        }
+                        if(streetChoice2 != -1) {
+                            for (Straat street : streets) {
+                                if (player2Properties.get(streetChoice2).streetID == street.streetID) {
+                                    SaxionApp.printLine("Je hebt " + street.name + " gekozen.");
+                                    player2Property = street;
+                                }
+                            }
+                            SaxionApp.pause();
+
+                            if (player1Property.mortgaged) {
+                                SaxionApp.printLine(player1Property.name + " heeft een hypotheek van " + (int) (player1Property.mortgage * 1.1) + " (incl. rente).");
+                                SaxionApp.printLine("Als jullie akkoord gaan, neemt " + chosenPlayer.playerName + " deze hypotheek over.");
+                                SaxionApp.print("Gaan jullie akkoord? (ja of nee)? ");
+                                String swapChoice = SaxionApp.readString();
+                                while (!swapChoice.equalsIgnoreCase("ja") && !swapChoice.equalsIgnoreCase("nee")) {
+                                    SaxionApp.print("Voer een geldig antwoord in (ja of nee): ");
+                                    swapChoice = SaxionApp.readString();
+                                }
+                                if (swapChoice.equalsIgnoreCase("ja")) {
+                                    swapProperties(player1Property, player2Property, chosenPlayer);
+                                }
+                            } else if (player2Property.mortgaged) {
+                                SaxionApp.printLine(player2Property.name + " heeft een hypotheek van " + (int) (player2Property.mortgage * 1.1) + " (incl. rente).");
+                                SaxionApp.printLine("Als jullie akkoord gaan, neemt " + activePlayer.playerName + " deze hypotheek over.");
+                                SaxionApp.print("Gaan jullie akkoord? (ja of nee)? ");
+                                String swapChoice = SaxionApp.readString();
+                                while (!swapChoice.equalsIgnoreCase("ja") && !swapChoice.equalsIgnoreCase("nee")) {
+                                    SaxionApp.print("Voer een geldig antwoord in (ja of nee): ");
+                                    swapChoice = SaxionApp.readString();
+                                }
+                                if (swapChoice.equalsIgnoreCase("ja")) {
+                                    swapProperties(player1Property, player2Property, chosenPlayer);
+                                }
+                            } else {
+                                swapProperties(player1Property, player2Property, chosenPlayer);
+                            }
+                        }
                     }
-                } else if(player2Property.mortgaged) {
-                    SaxionApp.printLine(player2Property.name + " heeft een hypotheek van " + (int)(player2Property.mortgage*1.1) + " (incl. rente).");
-                    SaxionApp.printLine("Als jullie akkoord gaan, neemt " + activePlayer.playerName + " deze hypotheek over.");
-                    SaxionApp.print("Gaan jullie akkoord? (ja of nee)? ");
-                    String swapChoice = SaxionApp.readString();
-                    while(!swapChoice.equalsIgnoreCase("ja") && !swapChoice.equalsIgnoreCase("nee")) {
-                        SaxionApp.print("Voer een geldig antwoord in (ja of nee): ");
-                        swapChoice = SaxionApp.readString();
-                    }
-                    if (swapChoice.equalsIgnoreCase("ja")) {
-                        swapProperties(player1Property, player2Property, chosenPlayer);
-                    }
-                } else {
-                    swapProperties(player1Property, player2Property, chosenPlayer);
                 }
             }
         }
@@ -785,7 +791,7 @@ public class Application implements Runnable {
                 }
                 int price = selectedStreet.serverPrice;
                 if (selectedStreet.amountOfServers != 4 && !selectedStreet.datacenterExistent) {
-                    SaxionApp.printLine("Hoeveel servers wil je bouwen op " + selectedStreet.name + "?(typ 0 om te stoppen)");
+                    SaxionApp.printLine("Hoeveel servers wil je bouwen op " + selectedStreet.name + "? (type 0 om te stoppen)");
                     input = -1;
                     while (input <= 0 || input > 4 - selectedStreet.amountOfServers) {
                         input = SaxionApp.readInt();
