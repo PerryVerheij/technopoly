@@ -30,11 +30,11 @@ public class Application implements Runnable {
         initializeCards();
         //choose player
         SaxionApp.turnBorderOff();
-        SaxionApp.drawBorderedText("Choose the amount of players (2-4)",175,0,36);
+        SaxionApp.drawBorderedText("Kies het aantal spelers (2-4).",175,0,36);
         amountOfPlayers = SaxionApp.readInt();
         while(amountOfPlayers<2||amountOfPlayers>4) {
             SaxionApp.removeLastPrint();
-            SaxionApp.printLine("ERROR:(2-4)",Color.red);
+            SaxionApp.printLine("Er mogen 2-4 spelers meedoen. Probeer het opnieuw.",Color.red);
             amountOfPlayers = SaxionApp.readInt();
         }
         initializePlayers(amountOfPlayers);
@@ -220,10 +220,11 @@ public class Application implements Runnable {
             SaxionApp.drawBorderedText("Naam van speler "+i,300,0,36);
             while (newPlayer.playerName.isBlank()) {
                 newPlayer.playerName = SaxionApp.readString();
-                if (newPlayer.playerName.isBlank()){
+                while (newPlayer.playerName.isBlank()){
                     SaxionApp.removeLastPrint();
                     SaxionApp.removeLastPrint();
-                    SaxionApp.printLine("Je moet een naam invoeren");
+                    SaxionApp.printLine("Je moet een naam invoeren.");
+                    newPlayer.playerName = SaxionApp.readString();
                 }
             }
             players.add(newPlayer);
