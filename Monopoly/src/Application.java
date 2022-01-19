@@ -53,7 +53,11 @@ public class Application implements Runnable {
             drawMoneyPlayer();
             //game
             selectedStreet = searchStreet();
-            if(selectedStreet.buyable) {
+            if (selectedStreet.name.equalsIgnoreCase("door start gaan")) {
+                players.get(activePlayer.playerID-1).accountBalance+=200;
+                drawMoneyPlayer();
+                selectedStreet = searchStreet();
+            }else if(selectedStreet.buyable) {
                 SaxionApp.drawBorderedText("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ",250,200,mediumFontSize);
                 positionInput(11);
                 String buyChoice = SaxionApp.readString();
@@ -128,7 +132,11 @@ public class Application implements Runnable {
             if (n == activePlayer.playerID - 1) {
                 SaxionApp.setFill(Color.orange);
                 SaxionApp.setBorderColor(Color.orange);
-            } else{
+            } else if(players.get(n).broke){
+                SaxionApp.setFill(Color.darkGray);
+                SaxionApp.setBorderColor(Color.darkGray);
+            }
+            else{
                 SaxionApp.setFill(Color.red);
                 SaxionApp.setBorderColor(Color.red);
             }
