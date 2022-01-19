@@ -768,8 +768,11 @@ public class Application implements Runnable {
             } else {
                 activePlayer = players.get(0);
             }
-            if (activePlayer.accountBalance>=0){
+            if (activePlayer.accountBalance>=0&&!activePlayer.broke){
                 zerocheck = true;
+            }else{
+                activePlayer.accountBalance=0;
+                activePlayer.broke=true;
             }
         }
 

@@ -4,4 +4,5 @@ public class Speler {
     int accountBalance = 1500;
     int jailcount = 0;
     boolean jail = false;
+    boolean broke = false;
 }
