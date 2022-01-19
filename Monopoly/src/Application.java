@@ -134,7 +134,7 @@ public class Application implements Runnable {
                 SaxionApp.setBorderColor(Color.orange);
             } else if(players.get(n).broke){
                 SaxionApp.setFill(Color.darkGray);
-                SaxionApp.setBorderColor(Color.darkGray);
+                SaxionApp.setBorderColor(Color.lightGray);
             }
             else{
                 SaxionApp.setFill(Color.red);
