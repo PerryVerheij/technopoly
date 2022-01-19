@@ -113,6 +113,7 @@ public class Application implements Runnable {
                     checkTurnInput();
                 }
             }
+
         }
     }
 
@@ -706,11 +707,18 @@ public class Application implements Runnable {
     }
 
     public void updateActivePlayer() {
-        if (activePlayer.playerID<amountOfPlayers){
-            activePlayer = players.get(activePlayer.playerID);
-        }else{
-            activePlayer = players.get(0);
+        boolean zerocheck=false;
+        while(!zerocheck) {
+            if (activePlayer.playerID < amountOfPlayers) {
+                activePlayer = players.get(activePlayer.playerID);
+            } else {
+                activePlayer = players.get(0);
+            }
+            if (activePlayer.accountBalance>=0){
+                zerocheck = true;
+            }
         }
+
         nextTurn = true;
     }
 
