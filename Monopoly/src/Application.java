@@ -999,9 +999,11 @@ public class Application implements Runnable {
     public void auction() {
         ArrayList<Speler> bidPlayers = new ArrayList<>();
         for (Speler player : players) {
-            Speler bidPlayer;
-            bidPlayer = player;
-            bidPlayers.add(bidPlayer);
+            if (!player.broke) {
+                Speler bidPlayer;
+                bidPlayer = player;
+                bidPlayers.add(bidPlayer);
+            }
         }
         Speler auctionActivePlayer = activePlayer;
         int highestBid = selectedStreet.value / 2;
@@ -1016,19 +1018,22 @@ public class Application implements Runnable {
                     bidPlayers.remove(auctionActivePlayer);
                     i--;
                     SaxionApp.printLine("Doordat het lager was dan het hoogste bod ben je uit de veiling gezet.");
+                    SaxionApp.pause();
                 } else if (bid > auctionActivePlayer.accountBalance) {
                     SaxionApp.printLine("Dit bod is hoger dan waar je geld voor hebt, probeer opnieuw");
                 } else{
                     highestBid = bid;
                 }
             }
-            if (i+1<bidPlayers.size()){
-                i++;
-                auctionActivePlayer = bidPlayers.get(i);
-            }else{
-                i=0;
-                auctionActivePlayer = bidPlayers.get(0);
-            }
+
+                    if (i + 1 < bidPlayers.size()) {
+                        i++;
+                        auctionActivePlayer = bidPlayers.get(i);
+                    } else {
+                        i = 0;
+                        auctionActivePlayer = bidPlayers.get(0);
+                    }
+
 
         }
         selectedStreet.owner = bidPlayers.get(0).playerID;
