@@ -116,6 +116,7 @@ public class Application implements Runnable {
                     checkTurnInput();
                 }
             }
+
         }
     }
 
@@ -124,10 +125,10 @@ public class Application implements Runnable {
             SaxionApp.setFill(Color.darkGray);
             SaxionApp.setBorderColor(Color.gray);
             SaxionApp.drawRectangle(60 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 10, (SaxionApp.getWidth() - 180) / 4 - 50, 200);
-            if (n==activePlayer.playerID-1) {
+            if (n == activePlayer.playerID - 1) {
                 SaxionApp.setFill(Color.orange);
                 SaxionApp.setBorderColor(Color.orange);
-            }else{
+            } else{
                 SaxionApp.setFill(Color.red);
                 SaxionApp.setBorderColor(Color.red);
             }
@@ -753,7 +754,7 @@ public class Application implements Runnable {
                 checkGroup(true);
             }
             case '4' -> getMortgage();
-            case '5' -> updateActivePlayer();
+            case '5' -> updateplayerturn();
         }
     }
 
@@ -784,17 +785,48 @@ public class Application implements Runnable {
             }
             case '4' -> getMortgage();
             case '5' -> payMortgage();
-            case '6' -> updateActivePlayer();
+            case '6' -> updateplayerturn();
         }
     }
 
     public void updateActivePlayer() {
-        if (activePlayer.playerID<amountOfPlayers){
+        if (activePlayer.playerID < amountOfPlayers) {
             activePlayer = players.get(activePlayer.playerID);
-        }else{
+        } else {
             activePlayer = players.get(0);
         }
         nextTurn = true;
+    }
+    public void updateplayerturn(){
+        if (!(activePlayer.accountBalance>=0)){
+            activePlayer.accountBalance=0;
+            players.get(activePlayer.playerID-1).broke=true;
+            for (Straat street: streets){
+                if (street.owner==activePlayer.playerID){
+                    street.owner=0;
+                    street.buyable=true;
+                }
+            }
+        }
+        if (activePlayer.broke) {
+            while (activePlayer.broke) {
+                updateActivePlayer();
+            }
+        }else{
+            updateActivePlayer();
+            if (activePlayer.broke){
+                updateplayerturn();
+            }
+        }
+        int brokes = 0;
+        for (Speler player : players){
+            if (player.broke){
+                brokes++;
+            }
+        }
+        if (brokes==amountOfPlayers-1){
+            endGame=true;
+        }
     }
 
     public void printGroupMenu() {
