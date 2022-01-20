@@ -963,7 +963,7 @@ public class Application implements Runnable {
                             }
                         }
                         SaxionApp.drawBorderedText("Kies de straat waarop je wil bouwen:",200,150,largeFontSize);
-                        SaxionApp.drawBorderedText("Voer 0 in om te stoppen.",275,200,mediumFontSize);
+                        SaxionApp.drawBorderedText("Voer 0 in om te stoppen.",350,200,mediumFontSize);
                         printStreetBuildInfo(street1,street2,street3,amountOfStreets);
                         if(loopCounter > 0) {
                             SaxionApp.drawBorderedText("Voer een geldig antwoord in (1-3).",275,230,mediumFontSize);
@@ -982,24 +982,42 @@ public class Application implements Runnable {
                         case 2 -> selectedStreet = street2;
                         case 3 -> selectedStreet = street3;
                     }
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+
                     int price = selectedStreet.serverPrice;
                     if (selectedStreet.amountOfServers != 4 && !selectedStreet.datacenterExistent) {
-                        SaxionApp.printLine("Hoeveel servers wil je bouwen op " + selectedStreet.name + "? (type 0 om te stoppen)");
-                        input = -1;
-                        while (input < 0 || input > 4 - selectedStreet.amountOfServers) {
-                            input = SaxionApp.readInt();
+                        int serverBuildInput = -1;
+                        loopCounter = 0;
+                        while (serverBuildInput < 0 || serverBuildInput > 4-selectedStreet.amountOfServers) {
+                            SaxionApp.clear();
+                            drawMoneyPlayer();
+
+                            SaxionApp.drawBorderedText("Hoeveel servers wil je bouwen op " + selectedStreet.name + "?",200,200,mediumFontSize);
+                            SaxionApp.drawBorderedText("Voer 0 in om te stoppen.",350,230,mediumFontSize);
+                            if(loopCounter>0) {
+                                SaxionApp.drawBorderedText("Je mag max. 4 servers op een straat hebben.",200,260,mediumFontSize);
+                                positionInput(14);
+                            } else {
+                                positionInput(12);
+                            }
+                            serverBuildInput = SaxionApp.readInt();
+                            loopCounter++;
                         }
-                        if (price * input > activePlayer.accountBalance) {
-                            SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
+                        if (price * serverBuildInput > activePlayer.accountBalance) {
+                            SaxionApp.clear();
+                            drawMoneyPlayer();
+
+                            SaxionApp.drawBorderedText("Je hebt niet genoeg geld hiervoor.",300,200,mediumFontSize);
                             SaxionApp.pause();
                         } else {
-                            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price * input;
-                            streets.get(selectedStreet.streetID - 1).amountOfServers = streets.get(selectedStreet.streetID - 1/*?!*/).amountOfServers + input;
+                            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price * serverBuildInput;
+                            streets.get(selectedStreet.streetID - 1).amountOfServers = streets.get(selectedStreet.streetID - 1/*?!*/).amountOfServers + serverBuildInput;
                         }
                     } else if (!selectedStreet.datacenterExistent) {
                         SaxionApp.printLine("Wil je een datacenter bouwen?(Typ \"ja\" om verder te gaan)");
-                        String stringinput = SaxionApp.readString();
-                        if (stringinput.equalsIgnoreCase("ja")) {
+                        String stringInput = SaxionApp.readString();
+                        if (stringInput.equalsIgnoreCase("ja")) {
                             if (price > activePlayer.accountBalance) {
                                 SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
                                 SaxionApp.pause();
