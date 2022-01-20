@@ -71,7 +71,6 @@ public class Application implements Runnable {
                 if(buyChoice.equalsIgnoreCase("ja")) {
                     buyStreet();
                 }else{
-                    auctionPrint();
                     auction();
                 }
             } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
@@ -1181,44 +1180,54 @@ public class Application implements Runnable {
             }
         }
         Speler auctionActivePlayer = activePlayer;
-        int highestBid = selectedStreet.value / 2;
+        int highestBid = selectedStreet.value/2;
         int i = 0;
         while (bidPlayers.size() > 1) {
-
             int bid = 1000000000;
+            int loopCounter = 0;
             while (bid > auctionActivePlayer.accountBalance) {
-                SaxionApp.print(auctionActivePlayer.playerName+":");
+                SaxionApp.clear();
+                drawMoneyPlayer();
+                SaxionApp.drawBorderedText("Veiling van " + selectedStreet.name,300,150,largeFontSize);
+                SaxionApp.drawBorderedText("Startbedrag: " + selectedStreet.value/2,350,200,mediumFontSize);
+                SaxionApp.drawBorderedText("Laatst geboden: " +  highestBid,350,230,mediumFontSize);
+                SaxionApp.drawBorderedText(auctionActivePlayer.playerName + ":",400,270,listFontSize);
+
+                positionInput(12);
                 bid = SaxionApp.readInt();
+
                 if (bid <= highestBid) {
                     bidPlayers.remove(auctionActivePlayer);
                     i--;
-                    SaxionApp.printLine("Doordat het lager was dan het hoogste bod ben je uit de veiling gezet.");
+
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+                    SaxionApp.drawBorderedText("Veiling van " + selectedStreet.name,300,150,largeFontSize);
+                    SaxionApp.drawBorderedText("Startbedrag: " + selectedStreet.value/2,350,200,mediumFontSize);
+                    SaxionApp.drawBorderedText("Laatst geboden: " +  highestBid,350,230,mediumFontSize);
+
+                    SaxionApp.drawBorderedText("Doordat je bod lager is dan het hoogste bod,",200,350,mediumFontSize);
+                    SaxionApp.drawBorderedText("ben je uit de veiling gezet.",300,380,mediumFontSize);
                     SaxionApp.pause();
+
                 } else if (bid > auctionActivePlayer.accountBalance) {
-                    SaxionApp.printLine("Dit bod is hoger dan waar je geld voor hebt, probeer opnieuw");
-                } else{
+                    SaxionApp.drawBorderedText("Dit bod is hoger dan waar je geld voor hebt.",150,350,mediumFontSize);
+                    SaxionApp.drawBorderedText("Probeer het opnieuw.",300,380,mediumFontSize);
+                    SaxionApp.pause();
+
+                } else {
                     highestBid = bid;
                 }
             }
-
-                    if (i + 1 < bidPlayers.size()) {
-                        i++;
-                        auctionActivePlayer = bidPlayers.get(i);
-                    } else {
-                        i = 0;
-                        auctionActivePlayer = bidPlayers.get(0);
-                    }
-
-
+            if (i + 1 < bidPlayers.size()) {
+                i++;
+                auctionActivePlayer = bidPlayers.get(i);
+            } else {
+                i = 0;
+                auctionActivePlayer = bidPlayers.get(0);
+            }
         }
         selectedStreet.owner = bidPlayers.get(0).playerID;
         players.get(selectedStreet.owner-1).accountBalance=players.get(selectedStreet.owner-1).accountBalance-highestBid;
-    }
-
-    public void auctionPrint(){
-        SaxionApp.print("                                ");
-        SaxionApp.printLine("Veiling van "+selectedStreet.name);
-        SaxionApp.print("                                ");
-        SaxionApp.printLine("Startbedrag:"+selectedStreet.value/2);
     }
 }
