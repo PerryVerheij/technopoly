@@ -54,7 +54,10 @@ public class Application implements Runnable {
             drawMoneyPlayer();
             //game
             selectedStreet = searchStreet(false);
-            if(selectedStreet.buyable) {
+            if (selectedStreet.name.equalsIgnoreCase("door start gaan")) {
+                players.get(activePlayer.playerID-1).accountBalance+=200;
+                selectedStreet = searchStreet(false);
+            }else if(selectedStreet.buyable) {
                 SaxionApp.drawBorderedText("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ",250,200,mediumFontSize);
                 positionInput(11);
                 String buyChoice = SaxionApp.readString();
@@ -138,7 +141,11 @@ public class Application implements Runnable {
             if (n == activePlayer.playerID - 1) {
                 SaxionApp.setFill(Color.orange);
                 SaxionApp.setBorderColor(Color.orange);
-            } else{
+            } else if(players.get(n).broke){
+                SaxionApp.setFill(Color.darkGray);
+                SaxionApp.setBorderColor(Color.lightGray);
+            }
+            else{
                 SaxionApp.setFill(Color.red);
                 SaxionApp.setBorderColor(Color.red);
             }
@@ -1104,9 +1111,11 @@ public class Application implements Runnable {
     public void auction() {
         ArrayList<Speler> bidPlayers = new ArrayList<>();
         for (Speler player : players) {
-            Speler bidPlayer;
-            bidPlayer = player;
-            bidPlayers.add(bidPlayer);
+            if (!player.broke) {
+                Speler bidPlayer;
+                bidPlayer = player;
+                bidPlayers.add(bidPlayer);
+            }
         }
         Speler auctionActivePlayer = activePlayer;
         int highestBid = selectedStreet.value / 2;
@@ -1121,19 +1130,22 @@ public class Application implements Runnable {
                     bidPlayers.remove(auctionActivePlayer);
                     i--;
                     SaxionApp.printLine("Doordat het lager was dan het hoogste bod ben je uit de veiling gezet.");
+                    SaxionApp.pause();
                 } else if (bid > auctionActivePlayer.accountBalance) {
                     SaxionApp.printLine("Dit bod is hoger dan waar je geld voor hebt, probeer opnieuw");
                 } else{
                     highestBid = bid;
                 }
             }
-            if (i+1<bidPlayers.size()){
-                i++;
-                auctionActivePlayer = bidPlayers.get(i);
-            }else{
-                i=0;
-                auctionActivePlayer = bidPlayers.get(0);
-            }
+
+                    if (i + 1 < bidPlayers.size()) {
+                        i++;
+                        auctionActivePlayer = bidPlayers.get(i);
+                    } else {
+                        i = 0;
+                        auctionActivePlayer = bidPlayers.get(0);
+                    }
+
 
         }
         selectedStreet.owner = bidPlayers.get(0).playerID;
