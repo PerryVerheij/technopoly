@@ -1015,21 +1015,30 @@ public class Application implements Runnable {
                             streets.get(selectedStreet.streetID - 1).amountOfServers = streets.get(selectedStreet.streetID - 1/*?!*/).amountOfServers + serverBuildInput;
                         }
                     } else if (!selectedStreet.datacenterExistent) {
-                        SaxionApp.printLine("Wil je een datacenter bouwen?(Typ \"ja\" om verder te gaan)");
+                        SaxionApp.drawBorderedText("Wil je een datacenter bouwen? (ja of nee)",250,230,mediumFontSize);
                         String stringInput = SaxionApp.readString();
+                        while(!stringInput.equalsIgnoreCase("ja") && !stringInput.equalsIgnoreCase("nee")) {
+                            SaxionApp.clear();
+                            drawMoneyPlayer();
+                            SaxionApp.drawBorderedText("Voer een geldig antwoord in (ja of nee): ",250,200,mediumFontSize);
+                            positionInput(12);
+                            stringInput = SaxionApp.readString();
+                        }
                         if (stringInput.equalsIgnoreCase("ja")) {
                             if (price > activePlayer.accountBalance) {
-                                SaxionApp.printLine("Je hebt niet genoeg geld hiervoor.");
+                                SaxionApp.clear();
+                                drawMoneyPlayer();
+
+                                SaxionApp.drawBorderedText("Je hebt niet genoeg geld hiervoor.",300,200,mediumFontSize);
                                 SaxionApp.pause();
                             } else {
-                                players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance - price;
-                                streets.get(selectedStreet.streetID - 1).amountOfServers = 0;
-                                streets.get(selectedStreet.streetID - 1).datacenterExistent = true;
+                                players.get(activePlayer.playerID-1).accountBalance = players.get(activePlayer.playerID-1).accountBalance - price;
+                                streets.get(selectedStreet.streetID-1).amountOfServers = 0;
+                                streets.get(selectedStreet.streetID-1).datacenterExistent = true;
                             }
                         }
-
                     } else {
-                        SaxionApp.printLine("Dit heeft al een datacenter, kies sloop servers om dit af te breken");
+                        SaxionApp.drawBorderedText("Er is al een datacenter, kies de sloopoptie om dit af te breken.",250,200,mediumFontSize);
                         SaxionApp.pause();
                     }
                 } else if (!demolish && groupMortgaged) {
@@ -1053,27 +1062,36 @@ public class Application implements Runnable {
                     Straat street2 = streets.get(0);
                     Straat street3 = streets.get(0);
                     int i2 = 1;
-                    for (Straat street : streets) {
-                        if (street.group == input) {
-                            SaxionApp.printLine(i2 + ". " + street.name);
-                            switch (i2) {
-                                case 1 -> street1 = street;
-                                case 2 -> street2 = street;
-                                case 3 -> street3 = street;
-                            }
-                            i2++;
-                        }
-                    }
+                    int loopCounter = 0;
+                    int streetInput = -1;
 
-                    int streetInput = 0;
-                    while (streetInput < 1 || streetInput > amountOfStreets) {
+                    while (streetInput < 0 || streetInput > amountOfStreets) {
                         SaxionApp.clear();
                         drawMoneyPlayer();
 
+                        for (Straat street : streets) {
+                            if (street.group == input) {
+                                SaxionApp.drawBorderedText(i2 + ". " + street.name,425,280+30*i2,mediumFontSize);
+                                switch (i2) {
+                                    case 1 -> street1 = street;
+                                    case 2 -> street2 = street;
+                                    case 3 -> street3 = street;
+                                }
+                                i2++;
+                            }
+                        }
                         SaxionApp.drawBorderedText("Kies de straat waarop je wil slopen:",200,150,largeFontSize);
+                        SaxionApp.drawBorderedText("Voer 0 in om te stoppen.",350,200,mediumFontSize);
                         printStreetBuildInfo(street1,street2,street3,amountOfStreets);
-                        positionInput(10);
+                        if(loopCounter > 0) {
+                            SaxionApp.drawBorderedText("Voer een geldig antwoord in (1-3).",275,230,mediumFontSize);
+                            positionInput(12);
+                        } else {
+                            positionInput(11);
+                        }
                         streetInput = SaxionApp.readInt();
+                        loopCounter++;
+                        i2 = 1;
                     }
                     switch (streetInput) {
                         case 1 -> selectedStreet = street1;
@@ -1087,24 +1105,51 @@ public class Application implements Runnable {
     }
 
     public void demolish(){
+        SaxionApp.clear();
+        drawMoneyPlayer();
+
         int payment = selectedStreet.serverPrice/2;
-        if (selectedStreet.datacenterExistent){
+        if (selectedStreet.datacenterExistent) {
             players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + payment;
             streets.get(selectedStreet.streetID - 1).amountOfServers = 4;
             streets.get(selectedStreet.streetID - 1).datacenterExistent = false;
-            SaxionApp.printLine("Het datacenter is gesloopt, wil je ook nog servers slopen?(ja/nee)");
-            if (SaxionApp.readString().equalsIgnoreCase("ja")){
+            SaxionApp.drawBorderedText("Het datacenter is gesloopt, wil je ook nog servers slopen? (ja of nee)",200,200,mediumFontSize);
+            positionInput(9);
+            String stringInput = SaxionApp.readString();
+            while(!stringInput.equalsIgnoreCase("ja") && !stringInput.equalsIgnoreCase("nee")) {
+                SaxionApp.clear();
+                drawMoneyPlayer();
+                SaxionApp.drawBorderedText("Voer een geldig antwoord in (ja of nee): ",250,200,mediumFontSize);
+                positionInput(12);
+                stringInput = SaxionApp.readString();
+            }
+            if (stringInput.equalsIgnoreCase("ja")){
                 demolish();
             }
-        }else if(selectedStreet.amountOfServers!=0){
-            SaxionApp.printLine("Hoeveel servers wil je slopen?");
+        } else if (selectedStreet.amountOfServers != 0) {
             int input =-120;
-            while (input<0||input>selectedStreet.amountOfServers){
-                input=SaxionApp.readInt();
+            int loopCounter = 0;
+            while (input < 0 || input > selectedStreet.amountOfServers) {
+                SaxionApp.clear();
+                drawMoneyPlayer();
+
+                SaxionApp.drawBorderedText("Hoeveel servers wil je slopen? Er zijn " + selectedStreet.amountOfServers + " servers aanwezig.",150,150,largeFontSize);
+                SaxionApp.drawBorderedText("Voer 0 in om te stoppen.",350,200,mediumFontSize);
+                if(loopCounter > 0) {
+                    SaxionApp.drawBorderedText("Voer een geldig antwoord in (1-3).",275,230,mediumFontSize);
+                    positionInput(12);
+                } else {
+                    positionInput(11);
+                }
+                input = SaxionApp.readInt();
+                loopCounter++;
             }
             streets.get(selectedStreet.streetID - 1).amountOfServers =streets.get(selectedStreet.streetID - 1).amountOfServers-input;
             players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + payment*input;
-            SaxionApp.printLine("De servers zijn gesloopt.");
+            SaxionApp.clear();
+            drawMoneyPlayer();
+
+            SaxionApp.drawBorderedText("De servers zijn gesloopt.",350,200,mediumFontSize);
             SaxionApp.pause();
         }
     }
