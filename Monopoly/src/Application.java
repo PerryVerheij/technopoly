@@ -11,13 +11,13 @@ public class Application implements Runnable {
     }
 
     //global variables
-    ArrayList<Straat> streets = new ArrayList<>();
+    ArrayList<Street> streets = new ArrayList<>();
     ArrayList<Card> cards = new ArrayList<>();
-    ArrayList<Speler> players = new ArrayList<>();
+    ArrayList<Player> players = new ArrayList<>();
     boolean endGame = false;
-    Straat selectedStreet = null;
+    Street selectedStreet = null;
     Card selectedCard = null;
-    Speler activePlayer = null;
+    Player activePlayer = null;
     int amountOfPlayers = 0;
     boolean nextTurn =false;
     int mediumFontSize = 30;
@@ -77,7 +77,7 @@ public class Application implements Runnable {
                 searchCards();
                 checkSelectedCard();
             } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
-                activePlayer.jailcount++;
+                activePlayer.jailCount++;
                 SaxionApp.drawBorderedText("Wil je jezelf vrij kopen?",300,200,largeFontSize);
                 SaxionApp.drawBorderedText("1. Ja (-50)",300,250,mediumFontSize);
                 SaxionApp.drawBorderedText("2. Nee, ik wil verder dobbelen",300, 280,mediumFontSize);
@@ -101,18 +101,18 @@ public class Application implements Runnable {
                         activePlayer.accountBalance = activePlayer.accountBalance - 50;
                     case 3:
                         activePlayer.jail=false;
-                        activePlayer.jailcount=0;
+                        activePlayer.jailCount =0;
                 }
-                if (activePlayer.jailcount==3){
+                if (activePlayer.jailCount ==3){
                     activePlayer.accountBalance=activePlayer.accountBalance-50;
                     activePlayer.jail=false;
-                    activePlayer.jailcount=0;
+                    activePlayer.jailCount =0;
                     SaxionApp.drawBorderedText("Er is 50 van je rekening afgeschreven vanwege de ransomware.",250,200,mediumFontSize);
                     SaxionApp.pause();
                 }
             } else if(selectedStreet.name.equalsIgnoreCase("naar ransomware!")){
                 activePlayer.jail=true;
-                activePlayer.jailcount=0;
+                activePlayer.jailCount =0;
             } else if(selectedStreet.name.equalsIgnoreCase("start")){
                 activePlayer.accountBalance= activePlayer.accountBalance+200;
             }else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID){
@@ -173,7 +173,7 @@ public class Application implements Runnable {
         readerStations.setSeparator(',');
         readerTaxes.setSeparator(',');
         while(readerStreets.loadRow()) {
-            Straat newStreet = new Straat();
+            Street newStreet = new Street();
             newStreet.name = readerStreets.getString(0);
             newStreet.value = readerStreets.getInt(1);
             newStreet.group = readerStreets.getInt(2);
@@ -188,7 +188,7 @@ public class Application implements Runnable {
             streets.add(newStreet);
         }
         while(readerStations.loadRow()) {
-            Straat newStreet = new Straat();
+            Street newStreet = new Street();
             newStreet.name = readerStations.getString(0);
             newStreet.value = readerStations.getInt(1);
             newStreet.group = readerStations.getInt(2);
@@ -197,7 +197,7 @@ public class Application implements Runnable {
             streets.add(newStreet);
         }
         while(readerLocations.loadRow()) {
-            Straat newStreet = new Straat();
+            Street newStreet = new Street();
             newStreet.name = readerLocations.getString(0);
             newStreet.value = readerLocations.getInt(1);
             newStreet.group = readerLocations.getInt(2);
@@ -209,15 +209,15 @@ public class Application implements Runnable {
             streets.get(i).streetID = i+1;
         }
         while(readerTaxes.loadRow()) {
-            Straat newStreet = new Straat();
+            Street newStreet = new Street();
             newStreet.name = readerTaxes.getString(0);
             newStreet.undeveloped = readerTaxes.getInt(1);
             newStreet.buyable = false;
             streets.add(newStreet);
         }
 
-        Straat kansstraat = new Straat();
-        Straat algstraat = new Straat();
+        Street kansstraat = new Street();
+        Street algstraat = new Street();
         kansstraat.name = "Kans";
         algstraat.name = "Algemeen Fonds";
         algstraat.buyable = false;
@@ -232,14 +232,14 @@ public class Application implements Runnable {
         while(cardReader.loadRow()){
             Card card = new Card();
             card.code = cardReader.getString(0);
-            card.geld = cardReader.getString(1);
-            card.geld2 = cardReader.getString(2);
+            card.money = cardReader.getString(1);
+            card.money2 = cardReader.getString(2);
             cards.add(card);
         }
     }
     public void initializePlayers(int inputPlayer){
         for (int i = 1; i<=inputPlayer;i++){
-            Speler newPlayer = new Speler();
+            Player newPlayer = new Player();
             newPlayer.playerID = i;
             SaxionApp.clear();
             SaxionApp.drawBorderedText("Naam van speler " + i + ":",300,200,largeFontSize);
@@ -266,9 +266,9 @@ public class Application implements Runnable {
         SaxionApp.print("                                                  ");
     }
 
-    public Straat searchStreet(boolean activePlayerPropertiesOnly) {
-        Straat resultStreet = null;
-        ArrayList<Straat> matchingStreets = new ArrayList<>();
+    public Street searchStreet(boolean activePlayerPropertiesOnly) {
+        Street resultStreet = null;
+        ArrayList<Street> matchingStreets = new ArrayList<>();
         SaxionApp.drawBorderedText("Voer de naam van de straat in: ",250,200,largeFontSize);
         positionInput(11);
         String userInput = SaxionApp.readString();
@@ -282,13 +282,13 @@ public class Application implements Runnable {
             userInput = SaxionApp.readString();
         }
         if(!activePlayerPropertiesOnly) {
-            for (Straat street : streets) {
+            for (Street street : streets) {
                 if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
                     matchingStreets.add(street);
                 }
             }
         } else {
-            for (Straat street : streets) {
+            for (Street street : streets) {
                 if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT)) && street.owner == activePlayer.playerID) {
                     matchingStreets.add(street);
                 }
@@ -303,13 +303,13 @@ public class Application implements Runnable {
             positionInput(13);
             userInput = SaxionApp.readString();
             if(!activePlayerPropertiesOnly) {
-                for (Straat street : streets) {
+                for (Street street : streets) {
                     if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
                         matchingStreets.add(street);
                     }
                 }
             } else {
-                for (Straat street : streets) {
+                for (Street street : streets) {
                     if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT)) && street.owner == activePlayer.playerID) {
                         matchingStreets.add(street);
                     }
@@ -345,7 +345,7 @@ public class Application implements Runnable {
             positionInput(11);
             streetChoice = SaxionApp.readInt();
         }
-        for (Straat street : streets) {
+        for (Street street : streets) {
             if (matchingStreets.get(streetChoice-1).name.equalsIgnoreCase(street.name)) {
                 resultStreet = street;
             }
@@ -430,7 +430,7 @@ public class Application implements Runnable {
         SaxionApp.clear();
         drawMoneyPlayer();
         if (selectedCard.code.equals("a7")) {
-            for (Speler player:players){
+            for (Player player:players){
                 if (player.playerID!=activePlayer.playerID){
                     player.accountBalance-=10;
                 } else {
@@ -438,12 +438,12 @@ public class Application implements Runnable {
                 }
             }
         } else if (selectedCard.code.equals("k1") || selectedCard.code.equals("k8")) {
-            SaxionApp.drawBorderedText(selectedCard.geld + " wordt betaald voor servers en",250,200,mediumFontSize);
-            SaxionApp.drawBorderedText(selectedCard.geld2 + " wordt betaald voor datacentra.",250,230,mediumFontSize);
+            SaxionApp.drawBorderedText(selectedCard.money + " wordt betaald voor servers en",250,200,mediumFontSize);
+            SaxionApp.drawBorderedText(selectedCard.money2 + " wordt betaald voor datacentra.",250,230,mediumFontSize);
             SaxionApp.pause();
             int placedHouses =0;
             int placedHotels =0;
-            for (Straat street:streets){
+            for (Street street:streets){
                 if (street.owner==activePlayer.playerID){
                     if (street.datacenterExistent){
                         placedHotels++;
@@ -451,14 +451,14 @@ public class Application implements Runnable {
                     placedHouses+=street.amountOfServers;
                 }
             }
-            players.get(activePlayer.playerID-1).accountBalance+=placedHouses*Integer.parseInt(selectedCard.geld)+placedHotels*Integer.parseInt(selectedCard.geld2);
+            players.get(activePlayer.playerID-1).accountBalance+=placedHouses*Integer.parseInt(selectedCard.money)+placedHotels*Integer.parseInt(selectedCard.money2);
         } else if(selectedCard.code.equalsIgnoreCase("ransomware")) {
             SaxionApp.drawBorderedText("Je gaat direct naar de gevangenis en niet langs start!",150,200,mediumFontSize);
             SaxionApp.pause();
             activePlayer.jail = true;
-            activePlayer.jailcount = 0;
+            activePlayer.jailCount = 0;
         } else if(selectedCard.code.charAt(0) == 'a'||selectedCard.code.charAt(0) == 'k'||selectedCard.code.equals("start")) {
-            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.geld);
+            players.get(activePlayer.playerID - 1).accountBalance = players.get(activePlayer.playerID - 1).accountBalance + Integer.parseInt(selectedCard.money);
         }
     }
 
@@ -493,13 +493,13 @@ public class Application implements Runnable {
         SaxionApp.clear();
         drawMoneyPlayer();
 
-        ArrayList<Speler> selectablePlayers = new ArrayList<>();
-        ArrayList<Straat> player1Properties = new ArrayList<>();
-        ArrayList<Straat> player2Properties = new ArrayList<>();
-        Straat player1Property = null;
-        Straat player2Property = null;
+        ArrayList<Player> selectablePlayers = new ArrayList<>();
+        ArrayList<Street> player1Properties = new ArrayList<>();
+        ArrayList<Street> player2Properties = new ArrayList<>();
+        Street player1Property = null;
+        Street player2Property = null;
 
-        for(Straat street : streets) {
+        for(Street street : streets) {
             if(street.owner == activePlayer.playerID) {
                 player1Properties.add(street);
             }
@@ -534,7 +534,7 @@ public class Application implements Runnable {
                 streetChoice1 = SaxionApp.readInt()-1;
             }
             if(streetChoice1 != -1) {
-                for (Straat street : streets) {
+                for (Street street : streets) {
                     if (player1Properties.get(streetChoice1).streetID == street.streetID) {
                         SaxionApp.clear();
                         drawMoneyPlayer();
@@ -549,7 +549,7 @@ public class Application implements Runnable {
                 SaxionApp.clear();
                 drawMoneyPlayer();
 
-                for (Speler player : players) {
+                for (Player player : players) {
                     if(player.playerID != activePlayer.playerID && !player.broke) {
                         selectablePlayers.add(player);
                     }
@@ -573,10 +573,10 @@ public class Application implements Runnable {
                     intPlayer = SaxionApp.readInt()-1;
                 }
                 if (intPlayer != -1) {
-                    Speler chosenPlayer = selectablePlayers.get(intPlayer);
+                    Player chosenPlayer = selectablePlayers.get(intPlayer);
 
                     // check whether chosen player has properties
-                    for (Straat street : streets) {
+                    for (Street street : streets) {
                         if (street.owner == chosenPlayer.playerID) {
                             player2Properties.add(street);
                         }
@@ -616,7 +616,7 @@ public class Application implements Runnable {
                             streetChoice2 = SaxionApp.readInt()-1;
                         }
                         if(streetChoice2 != -1) {
-                            for (Straat street : streets) {
+                            for (Street street : streets) {
                                 if (player2Properties.get(streetChoice2).streetID == street.streetID) {
                                     SaxionApp.clear();
                                     drawMoneyPlayer();
@@ -670,15 +670,15 @@ public class Application implements Runnable {
         }
     }
 
-    public void swapProperties(Straat player1Property, Straat player2Property, Speler chosenPlayer) {
+    public void swapProperties(Street player1Property, Street player2Property, Player chosenPlayer) {
         // swap properties and confirm the result
         String playerName1 = null;
         String playerName2 = null;
 
-        for(Straat street : streets) {
+        for(Street street : streets) {
             if(player1Property.streetID == street.streetID) {
                 street.owner = chosenPlayer.playerID;
-                for(Speler player : players) {
+                for(Player player : players) {
                     if(street.owner == player.playerID) {
                         playerName1 = player.playerName;
                     }
@@ -687,7 +687,7 @@ public class Application implements Runnable {
             }
             if(player2Property.streetID == street.streetID) {
                 street.owner = activePlayer.playerID;
-                for(Speler player : players) {
+                for(Player player : players) {
                     if (street.owner == player.playerID) {
                         playerName2 = player.playerName;
                     }
@@ -701,8 +701,8 @@ public class Application implements Runnable {
     public void getMortgage() {
         SaxionApp.clear();
         drawMoneyPlayer();
-        ArrayList<Straat> ownedStreets = new ArrayList<>();
-        for (Straat street : streets) {
+        ArrayList<Street> ownedStreets = new ArrayList<>();
+        for (Street street : streets) {
             if (street.owner == activePlayer.playerID) {
                 ownedStreets.add(street);
             }
@@ -734,7 +734,7 @@ public class Application implements Runnable {
                 streetChoice = SaxionApp.readInt()-1;
             }
 
-            Straat chosenStreet = ownedStreets.get(streetChoice);
+            Street chosenStreet = ownedStreets.get(streetChoice);
 
             if (chosenStreet.mortgaged) {
                 SaxionApp.drawBorderedText("Deze straat heeft al een hypotheek!", 250, 200, mediumFontSize);
@@ -757,8 +757,8 @@ public class Application implements Runnable {
     public void payMortgage() {
         SaxionApp.clear();
         drawMoneyPlayer();
-        ArrayList<Straat> mortgagedStreets = new ArrayList<>();
-        for (Straat street : streets) {
+        ArrayList<Street> mortgagedStreets = new ArrayList<>();
+        for (Street street : streets) {
             if (street.owner == activePlayer.playerID && street.mortgaged) {
                 mortgagedStreets.add(street);
             }
@@ -789,7 +789,7 @@ public class Application implements Runnable {
             streetChoice = SaxionApp.readInt()-1;
         }
         if(streetChoice != -1) {
-            Straat resultStreet = mortgagedStreets.get(streetChoice);
+            Street resultStreet = mortgagedStreets.get(streetChoice);
             players.get(activePlayer.playerID-1).accountBalance = (int) (players.get(activePlayer.playerID-1).accountBalance - (resultStreet.mortgage*1.1));
             streets.get(resultStreet.streetID-1).mortgaged = false;
 
@@ -802,7 +802,7 @@ public class Application implements Runnable {
 
     public boolean checkForMortgage() {
         boolean hasMortgage = false;
-        for(Straat street : streets) {
+        for(Street street : streets) {
             if (street.owner == activePlayer.playerID && street.mortgaged) {
                 hasMortgage = true;
                 break;
@@ -881,7 +881,7 @@ public class Application implements Runnable {
         if (activePlayer.accountBalance < 0) {
             activePlayer.accountBalance = 0;
             players.get(activePlayer.playerID-1).broke = true;
-            for (Straat street: streets) {
+            for (Street street: streets) {
                 if (street.owner == activePlayer.playerID) {
                     street.owner = 0;
                     street.buyable = true;
@@ -905,7 +905,7 @@ public class Application implements Runnable {
             }
         }
         int brokes = 0;
-        for (Speler player : players){
+        for (Player player : players){
             if (player.broke){
                 brokes++;
             }
@@ -950,7 +950,7 @@ public class Application implements Runnable {
                 amountOfStreets = 3;
             }
             int ownedOfGroup = 0;
-            for (Straat street : streets) {
+            for (Street street : streets) {
                 if (street.owner == activePlayer.playerID && street.group == input) {
                     ownedOfGroup++;
                 }
@@ -980,9 +980,9 @@ public class Application implements Runnable {
                 }
             } else {
                 if (!demolish && !groupMortgaged) {
-                    Straat street1 = streets.get(0);
-                    Straat street2 = streets.get(0);
-                    Straat street3 = streets.get(0);
+                    Street street1 = streets.get(0);
+                    Street street2 = streets.get(0);
+                    Street street3 = streets.get(0);
                     int i2 = 1;
                     int loopCounter = 0;
                     int streetInput = -1;
@@ -991,7 +991,7 @@ public class Application implements Runnable {
                         SaxionApp.clear();
                         drawMoneyPlayer();
 
-                        for (Straat street : streets) {
+                        for (Street street : streets) {
                             if (street.group == input) {
                                 SaxionApp.drawBorderedText(i2 + ". " + street.name,425,280+30*i2,mediumFontSize);
                                 switch (i2) {
@@ -1098,9 +1098,9 @@ public class Application implements Runnable {
                         checkGroup(demolish);
                     }
                 } else {
-                    Straat street1 = streets.get(0);
-                    Straat street2 = streets.get(0);
-                    Straat street3 = streets.get(0);
+                    Street street1 = streets.get(0);
+                    Street street2 = streets.get(0);
+                    Street street3 = streets.get(0);
                     int i2 = 1;
                     int loopCounter = 0;
                     int streetInput = -1;
@@ -1109,7 +1109,7 @@ public class Application implements Runnable {
                         SaxionApp.clear();
                         drawMoneyPlayer();
 
-                        for (Straat street : streets) {
+                        for (Street street : streets) {
                             if (street.group == input) {
                                 SaxionApp.drawBorderedText(i2 + ". " + street.name,425,280+30*i2,mediumFontSize);
                                 switch (i2) {
@@ -1194,7 +1194,7 @@ public class Application implements Runnable {
         }
     }
 
-    public void printStreetBuildInfo(Straat street1, Straat street2, Straat street3, int amountOfStreets) {
+    public void printStreetBuildInfo(Street street1, Street street2, Street street3, int amountOfStreets) {
         SaxionApp.drawBorderedText("Straat 1 heeft " + street1.amountOfServers + " servers.",350,430,mediumFontSize);
         if (street1.datacenterExistent) {
             SaxionApp.drawBorderedText("Straat 1 heeft een datacenter.",350,460,mediumFontSize);
@@ -1212,20 +1212,19 @@ public class Application implements Runnable {
     }
 
     public void auction() {
-        ArrayList<Speler> bidPlayers = new ArrayList<>();
-        for (Speler player : players) {
+        ArrayList<Player> bidPlayers = new ArrayList<>();
+        for (Player player : players) {
             if (!player.broke) {
-                Speler bidPlayer;
+                Player bidPlayer;
                 bidPlayer = player;
                 bidPlayers.add(bidPlayer);
             }
         }
-        Speler auctionActivePlayer = activePlayer;
+        Player auctionActivePlayer = activePlayer;
         int highestBid = selectedStreet.value/2;
         int i = 0;
         while (bidPlayers.size() > 1) {
             int bid = 1000000000;
-            int loopCounter = 0;
             while (bid > auctionActivePlayer.accountBalance) {
                 SaxionApp.clear();
                 drawMoneyPlayer();

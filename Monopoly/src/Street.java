@@ -1,4 +1,4 @@
-public class Straat {
+public class Street {
     String name = "";
     int streetID = 0;
     int value = 0;
