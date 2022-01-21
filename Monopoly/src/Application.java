@@ -552,7 +552,7 @@ public class Application implements Runnable {
                 drawMoneyPlayer();
 
                 for (Speler player : players) {
-                    if(player.playerID != activePlayer.playerID) {
+                    if(player.playerID != activePlayer.playerID && !player.broke) {
                         selectablePlayers.add(player);
                     }
                 }
