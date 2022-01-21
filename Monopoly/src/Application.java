@@ -57,6 +57,8 @@ public class Application implements Runnable {
             selectedStreet = searchStreet();
             while (selectedStreet.name.equalsIgnoreCase("langs start gaan")) {
                 players.get(activePlayer.playerID-1).accountBalance+=200;
+                SaxionApp.clear();
+                drawMoneyPlayer();
                 selectedStreet = searchStreet();
                 while(selectedStreet.name.equalsIgnoreCase("langs start gaan")) {
                     SaxionApp.drawBorderedText("Je kan niet twee keer langs start gaan.",250,200,mediumFontSize);
