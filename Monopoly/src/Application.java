@@ -248,12 +248,12 @@ public class Application implements Runnable {
         }
 
         Street kansstraat = new Street();
-        Street algstraat = new Street();
+        Street algStraat = new Street();
         kansstraat.name = "Kans";
-        algstraat.name = "Algemeen Fonds";
-        algstraat.buyable = false;
+        algStraat.name = "Algemeen Fonds";
+        algStraat.buyable = false;
         kansstraat.buyable = false;
-        streets.add(algstraat);
+        streets.add(algStraat);
         streets.add(kansstraat);
     }
     public void initializeCards(){
