@@ -10,7 +10,7 @@ public class Application implements Runnable {
         SaxionApp.start(new Application(), 1000, 700);
     }
 
-    //global "variables"
+    //global variables
     ArrayList<Straat> streets = new ArrayList<>();
     ArrayList<Card> cards = new ArrayList<>();
     ArrayList<Speler> players = new ArrayList<>();
@@ -74,7 +74,6 @@ public class Application implements Runnable {
                     auction();
                 }
             } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
-                //SaxionApp.pause();
                 searchCards();
                 checkSelectedCard();
             } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
@@ -128,7 +127,6 @@ public class Application implements Runnable {
                     checkTurnInput();
                 }
             }
-
         }
     }
 
@@ -880,15 +878,21 @@ public class Application implements Runnable {
         nextTurn = true;
     }
     public void updatePlayerTurn(){
-        if (!(activePlayer.accountBalance>=0)){
-            activePlayer.accountBalance=0;
-            players.get(activePlayer.playerID-1).broke=true;
-            for (Straat street: streets){
-                if (street.owner==activePlayer.playerID){
-                    street.owner=0;
-                    street.buyable=true;
+        if (activePlayer.accountBalance < 0) {
+            activePlayer.accountBalance = 0;
+            players.get(activePlayer.playerID-1).broke = true;
+            for (Straat street: streets) {
+                if (street.owner == activePlayer.playerID) {
+                    street.owner = 0;
+                    street.buyable = true;
+                    street.mortgaged = false;
                 }
             }
+            SaxionApp.clear();
+            drawMoneyPlayer();
+            SaxionApp.drawBorderedText(activePlayer.playerName + " is blut!",250,200,mediumFontSize);
+            SaxionApp.drawBorderedText("De bezittingen van deze speler zijn weer te koop!",200,230,mediumFontSize);
+            SaxionApp.pause();
         }
         if (activePlayer.broke) {
             while (activePlayer.broke) {
