@@ -308,7 +308,9 @@ public class Application implements Runnable {
             drawMoneyPlayer();
 
             SaxionApp.drawBorderedText("Voer de naam van de straat in:",250,200,largeFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Je moet een naam ingeven. Probeer het opnieuw.",150,250,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(13);
             userInput = SaxionApp.readString();
         }
@@ -322,7 +324,9 @@ public class Application implements Runnable {
             drawMoneyPlayer();
 
             SaxionApp.drawBorderedText("Voer de naam van de straat in:",250,200,largeFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Er zijn geen straten gevonden. Probeer het opnieuw.",150,250,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(13);
             userInput = SaxionApp.readString();
             for (Street street : streets) {
@@ -345,7 +349,9 @@ public class Application implements Runnable {
             drawStreetList(matchingStreets);
             SaxionApp.drawBorderedText("Voer je keuze in:",350,120,largeFontSize);
             SaxionApp.drawBorderedText("Voer een 0 in om opnieuw te zoeken.",250,170,mediumFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(11);
             streetChoice = SaxionApp.readInt();
         }
@@ -375,7 +381,9 @@ public class Application implements Runnable {
             drawMoneyPlayer();
 
             SaxionApp.drawBorderedText("Voer de code van de kaart in:",250,200,largeFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Je moet een code ingeven. Probeer het opnieuw.",150,250,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(13);
             userInput = SaxionApp.readString();
         }
@@ -389,7 +397,9 @@ public class Application implements Runnable {
             drawMoneyPlayer();
 
             SaxionApp.drawBorderedText("Voer de code van de kaart in:",250,200,largeFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Er zijn geen kaarten gevonden. Probeer het opnieuw.",150,250,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(13);
             userInput = SaxionApp.readString();
             for (Card card : cards) {
@@ -424,7 +434,9 @@ public class Application implements Runnable {
 
             SaxionApp.drawBorderedText("Voer je keuze in:",350,120,largeFontSize);
             SaxionApp.drawBorderedText("Voer een 0 in om opnieuw te proberen.",250,170,mediumFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(11);
             cardChoice = SaxionApp.readInt();
         }
@@ -533,7 +545,9 @@ public class Application implements Runnable {
                 drawMoneyPlayer();
                 drawStreetList(player1Properties);
                 SaxionApp.drawBorderedText("Selecteer een bezit (0 om te stoppen):",200,150,largeFontSize);
+                SaxionApp.setFill(Color.red);
                 SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
+                SaxionApp.setFill(Color.white);
                 positionInput(11);
                 streetChoice1 = SaxionApp.readInt()-1;
             }
@@ -572,7 +586,9 @@ public class Application implements Runnable {
                         SaxionApp.drawBorderedText(i+1 + ". " + selectablePlayers.get(i).playerName,275,275+20*i,listFontSize);
                     }
                     SaxionApp.drawBorderedText("Met welke speler wil je " + player1Property.name + " ruilen?",150,150,largeFontSize);
+                    SaxionApp.setFill(Color.red);
                     SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
+                    SaxionApp.setFill(Color.white);
                     positionInput(11);
                     intPlayer = SaxionApp.readInt()-1;
                 }
@@ -604,7 +620,9 @@ public class Application implements Runnable {
 
                             drawStreetList(player2Properties);
                             SaxionApp.drawBorderedText("Selecteer een bezit (0 om te stoppen):",200,150,largeFontSize);
+                            SaxionApp.setFill(Color.red);
                             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
+                            SaxionApp.setFill(Color.white);
                             positionInput(11);
                             streetChoice2 = SaxionApp.readInt()-1;
                         }
@@ -711,7 +729,9 @@ public class Application implements Runnable {
 
                 drawStreetList(ownedStreets);
                 SaxionApp.drawBorderedText("Selecteer de straat (0 om te stoppen):", 200, 150, largeFontSize);
+                SaxionApp.setFill(Color.red);
                 SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.", 250, 200, mediumFontSize);
+                SaxionApp.setFill(Color.white);
                 positionInput(11);
                 streetChoice = SaxionApp.readInt()-1;
             }
@@ -755,7 +775,9 @@ public class Application implements Runnable {
 
             drawStreetList(mortgagedStreets);
             SaxionApp.drawBorderedText("Selecteer de straat (0 om te stoppen):",200,150,largeFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(11);
             streetChoice = SaxionApp.readInt()-1;
         }
@@ -931,7 +953,9 @@ public class Application implements Runnable {
             SaxionApp.clear();
             drawMoneyPlayer();
             printGroupMenu();
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Dat is geen groep! Probeer het opnieuw.",250,430,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(22);
             input = SaxionApp.readInt();
         }
@@ -1244,8 +1268,10 @@ public class Application implements Runnable {
                     SaxionApp.pause();
 
                 } else if (bid > auctionActivePlayer.accountBalance) {
+                    SaxionApp.setFill(Color.red);
                     SaxionApp.drawBorderedText("Dit bod is hoger dan waar je geld voor hebt.",150,350,mediumFontSize);
                     SaxionApp.drawBorderedText("Probeer het opnieuw.",300,380,mediumFontSize);
+                    SaxionApp.setFill(Color.white);
                     SaxionApp.pause();
 
                 } else {
