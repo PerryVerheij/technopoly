@@ -19,7 +19,7 @@ public class Application implements Runnable {
     Card selectedCard = null;
     Player activePlayer = null;
     int amountOfPlayers = 0;
-    boolean nextTurn =false;
+    boolean nextTurn = false;
     int mediumFontSize = 30;
     int largeFontSize = 38;
     int listFontSize = 20;
@@ -27,10 +27,10 @@ public class Application implements Runnable {
     public void run() {
         //pre choose player
         SaxionApp.setFill(Color.white);
+        SaxionApp.turnBorderOff();
         initializeStreets();
         initializeCards();
         //choose player
-        SaxionApp.turnBorderOff();
         SaxionApp.drawBorderedText("Kies het aantal spelers (2-4):",250,200,largeFontSize);
         positionInput(11);
         amountOfPlayers = SaxionApp.readInt();
@@ -38,13 +38,14 @@ public class Application implements Runnable {
             SaxionApp.clear();
             SaxionApp.drawBorderedText("Kies het aantal spelers (2-4):",250,200,largeFontSize);
             SaxionApp.drawBorderedText("Er mogen 2 tot 4 spelers meedoen.",250,250,mediumFontSize);
+            SaxionApp.setFill(Color.red);
             SaxionApp.drawBorderedText("Probeer het opnieuw.",250,280,mediumFontSize);
+            SaxionApp.setFill(Color.white);
             positionInput(15);
             amountOfPlayers = SaxionApp.readInt();
         }
         initializePlayers(amountOfPlayers);
         activePlayer = players.get(0);
-        SaxionApp.turnBorderOn();
         //post choose player
         while(!endGame) {
             //set variables
@@ -54,10 +55,40 @@ public class Application implements Runnable {
             drawMoneyPlayer();
             //game
             selectedStreet = searchStreet();
-            if (selectedStreet.name.equalsIgnoreCase("door start gaan")) {
+            while (selectedStreet.name.equalsIgnoreCase("langs start gaan")) {
                 players.get(activePlayer.playerID-1).accountBalance+=200;
                 selectedStreet = searchStreet();
-            }else if(selectedStreet.buyable) {
+                while(selectedStreet.name.equalsIgnoreCase("langs start gaan")) {
+                    SaxionApp.drawBorderedText("Je kan niet twee keer langs start gaan.",250,200,mediumFontSize);
+                    SaxionApp.pause();
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+                    selectedStreet = searchStreet();
+                }
+            }
+            if(selectedStreet.name.equalsIgnoreCase("algemeen fonds") || selectedStreet.name.equalsIgnoreCase("kans")) {
+                SaxionApp.drawBorderedText("Wil je een kaartcode invoeren? (ja of nee)",250,200,mediumFontSize);
+                positionInput(11);
+                String cardChoice = SaxionApp.readString();
+                while(!cardChoice.equalsIgnoreCase("ja") && !cardChoice.equalsIgnoreCase("nee")) {
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+                    SaxionApp.drawBorderedText("Voer een geldig antwoord in (ja of nee): ",250,200,mediumFontSize);
+                    positionInput(11);
+                    cardChoice = SaxionApp.readString();
+                }
+                if(cardChoice.equalsIgnoreCase("ja")) {
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+                    searchCards();
+                    checkSelectedCard();
+                } else {
+                    SaxionApp.clear();
+                    drawMoneyPlayer();
+                    selectedStreet = searchStreet();
+                }
+            }
+            if(selectedStreet.buyable) {
                 SaxionApp.drawBorderedText("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ",250,200,mediumFontSize);
                 positionInput(11);
                 String buyChoice = SaxionApp.readString();
@@ -73,9 +104,6 @@ public class Application implements Runnable {
                 } else {
                     auction();
                 }
-            } else if (selectedStreet.name.equalsIgnoreCase("algemeen fonds")||selectedStreet.name.equalsIgnoreCase("kans")) {
-                searchCards();
-                checkSelectedCard();
             } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
                 activePlayer.jailCount++;
                 SaxionApp.drawBorderedText("Wil je jezelf vrij kopen?",300,200,largeFontSize);
@@ -100,10 +128,10 @@ public class Application implements Runnable {
                     case 1:
                         activePlayer.accountBalance = activePlayer.accountBalance - 50;
                     case 3:
-                        activePlayer.jail=false;
+                        activePlayer.jail = false;
                         activePlayer.jailCount =0;
                 }
-                if (activePlayer.jailCount ==3){
+                if (activePlayer.jailCount == 3){
                     activePlayer.accountBalance=activePlayer.accountBalance-50;
                     activePlayer.jail=false;
                     activePlayer.jailCount =0;
@@ -111,11 +139,11 @@ public class Application implements Runnable {
                     SaxionApp.pause();
                 }
             } else if(selectedStreet.name.equalsIgnoreCase("naar ransomware!")){
-                activePlayer.jail=true;
-                activePlayer.jailCount =0;
+                activePlayer.jail = true;
+                activePlayer.jailCount = 0;
             } else if(selectedStreet.name.equalsIgnoreCase("start")){
                 activePlayer.accountBalance= activePlayer.accountBalance+200;
-            }else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID){
+            } else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID) {
                 payInterest();
             }
             while(!nextTurn) {
@@ -155,6 +183,7 @@ public class Application implements Runnable {
             SaxionApp.drawBorderedText("¤" + players.get(n).accountBalance, 85 + (SaxionApp.getWidth() - 100) / 4 * n, SaxionApp.getHeight() - SaxionApp.getHeight() / 11, 20);
             SaxionApp.turnBorderOn();
         }
+        SaxionApp.turnBorderOff();
         SaxionApp.setFill(Color.white);
     }
 
@@ -391,7 +420,7 @@ public class Application implements Runnable {
                 }
             }
 
-            SaxionApp.drawBorderedText("Voer je keuze in: ",350,120,largeFontSize);
+            SaxionApp.drawBorderedText("Voer je keuze in:",350,120,largeFontSize);
             SaxionApp.drawBorderedText("Voer een 0 in om opnieuw te proberen.",250,170,mediumFontSize);
             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
             positionInput(11);
