@@ -37,8 +37,8 @@ public class Application implements Runnable {
         while(amountOfPlayers<2||amountOfPlayers>4) {
             SaxionApp.clear();
             SaxionApp.drawBorderedText("Kies het aantal spelers (2-4):",250,200,largeFontSize);
-            SaxionApp.drawBorderedText("Er mogen 2 tot 4 spelers meedoen.",250,250,mediumFontSize);
             SaxionApp.setFill(Color.red);
+            SaxionApp.drawBorderedText("Er mogen 2 tot 4 spelers meedoen.",250,250,mediumFontSize);
             SaxionApp.drawBorderedText("Probeer het opnieuw.",250,280,mediumFontSize);
             SaxionApp.setFill(Color.white);
             positionInput(15);
