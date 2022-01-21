@@ -53,10 +53,10 @@ public class Application implements Runnable {
             SaxionApp.clear();
             drawMoneyPlayer();
             //game
-            selectedStreet = searchStreet(false);
+            selectedStreet = searchStreet();
             if (selectedStreet.name.equalsIgnoreCase("door start gaan")) {
                 players.get(activePlayer.playerID-1).accountBalance+=200;
-                selectedStreet = searchStreet(false);
+                selectedStreet = searchStreet();
             }else if(selectedStreet.buyable) {
                 SaxionApp.drawBorderedText("Wil je " + selectedStreet.name + " kopen voor " + selectedStreet.value + " (ja of nee)? ",250,200,mediumFontSize);
                 positionInput(11);
@@ -266,7 +266,7 @@ public class Application implements Runnable {
         SaxionApp.print("                                                  ");
     }
 
-    public Street searchStreet(boolean activePlayerPropertiesOnly) {
+    public Street searchStreet() {
         Street resultStreet = null;
         ArrayList<Street> matchingStreets = new ArrayList<>();
         SaxionApp.drawBorderedText("Voer de naam van de straat in: ",250,200,largeFontSize);
@@ -281,17 +281,9 @@ public class Application implements Runnable {
             positionInput(13);
             userInput = SaxionApp.readString();
         }
-        if(!activePlayerPropertiesOnly) {
-            for (Street street : streets) {
-                if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
-                    matchingStreets.add(street);
-                }
-            }
-        } else {
-            for (Street street : streets) {
-                if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT)) && street.owner == activePlayer.playerID) {
-                    matchingStreets.add(street);
-                }
+        for (Street street : streets) {
+            if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+                matchingStreets.add(street);
             }
         }
         while (matchingStreets.size() == 0) {
@@ -302,56 +294,41 @@ public class Application implements Runnable {
             SaxionApp.drawBorderedText("Er zijn geen straten gevonden. Probeer het opnieuw.",150,250,mediumFontSize);
             positionInput(13);
             userInput = SaxionApp.readString();
-            if(!activePlayerPropertiesOnly) {
-                for (Street street : streets) {
-                    if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
-                        matchingStreets.add(street);
-                    }
-                }
-            } else {
-                for (Street street : streets) {
-                    if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT)) && street.owner == activePlayer.playerID) {
-                        matchingStreets.add(street);
-                    }
+            for (Street street : streets) {
+                if (street.name.toLowerCase(Locale.ROOT).contains(userInput.toLowerCase(Locale.ROOT))) {
+                    matchingStreets.add(street);
                 }
             }
         }
         SaxionApp.clear();
         drawMoneyPlayer();
-        for (int i = 0; i < matchingStreets.size(); i++) {
-            if(i<15) {
-                SaxionApp.drawBorderedText(i+1 + ". " + matchingStreets.get(i).name,275,275+20*i,listFontSize);
-            } else {
-                SaxionApp.drawBorderedText(i+1 + ". " + matchingStreets.get(i).name,525,275+20*(i-15),listFontSize);
-            }
-        }
-        SaxionApp.drawBorderedText("Voer je keuze in:",350,150,largeFontSize);
+        drawStreetList(matchingStreets);
+        SaxionApp.drawBorderedText("Voer je keuze in:",350,120,largeFontSize);
+        SaxionApp.drawBorderedText("Voer een 0 in om opnieuw te zoeken.",250,170,mediumFontSize);
         positionInput(9);
         int streetChoice = SaxionApp.readInt();
-        while (streetChoice < 1 || streetChoice > matchingStreets.size()) {
+        while (streetChoice < 0 || streetChoice > matchingStreets.size()) {
             SaxionApp.clear();
             drawMoneyPlayer();
-            for (int i = 0; i < matchingStreets.size(); i++) {
-                if(i<15) {
-                    SaxionApp.drawBorderedText(i+1 + ". " + matchingStreets.get(i).name,275,275+20*i,listFontSize);
-                } else {
-                    SaxionApp.drawBorderedText(i+1 + ". " + matchingStreets.get(i).name,5252
-                            ,275+20*(i-15),listFontSize);
-                }
-            }
 
-            SaxionApp.drawBorderedText("Voer je keuze in: ",350,150,largeFontSize);
+            drawStreetList(matchingStreets);
+            SaxionApp.drawBorderedText("Voer je keuze in: ",350,120,largeFontSize);
+            SaxionApp.drawBorderedText("Voer een 0 in om opnieuw te zoeken.",250,170,mediumFontSize);
             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
             positionInput(11);
             streetChoice = SaxionApp.readInt();
         }
-        for (Street street : streets) {
-            if (matchingStreets.get(streetChoice-1).name.equalsIgnoreCase(street.name)) {
-                resultStreet = street;
+        if(streetChoice == 0) {
+            SaxionApp.clear();
+            drawMoneyPlayer();
+            resultStreet = searchStreet();
+        } else {
+            for (Street street : streets) {
+                if (matchingStreets.get(streetChoice - 1).name.equalsIgnoreCase(street.name)) {
+                    resultStreet = street;
+                }
             }
-
         }
-
         SaxionApp.clear();
         drawMoneyPlayer();
         return resultStreet;
@@ -508,26 +485,14 @@ public class Application implements Runnable {
             SaxionApp.drawBorderedText("Je hebt geen bezittingen!",250,200,mediumFontSize);
             SaxionApp.pause();
         } else {
-            for (int i = 0; i < player1Properties.size(); i++) {
-                if(i<15) {
-                    SaxionApp.drawBorderedText(i+1 + ". " + player1Properties.get(i).name,275,275+20*i,listFontSize);
-                } else {
-                    SaxionApp.drawBorderedText(i+1 + ". " + player1Properties.get(i).name,525,275+20*(i-15),listFontSize);
-                }
-            }
+            drawStreetList(player1Properties);
             SaxionApp.drawBorderedText("Selecteer een bezit (0 om te stoppen):",200,150,largeFontSize);
             positionInput(9);
             int streetChoice1 = SaxionApp.readInt()-1;
             while (streetChoice1 < -1 || streetChoice1 > player1Properties.size()-1) {
                 SaxionApp.clear();
                 drawMoneyPlayer();
-                for (int i = 0; i < player1Properties.size(); i++) {
-                    if(i<15) {
-                        SaxionApp.drawBorderedText(i+1 + ". " + player1Properties.get(i).name,275,275+20*i,listFontSize);
-                    } else {
-                        SaxionApp.drawBorderedText(i+1 + ". " + player1Properties.get(i).name,525,275+20*(i-15),listFontSize);
-                    }
-                }
+                drawStreetList(player1Properties);
                 SaxionApp.drawBorderedText("Selecteer een bezit (0 om te stoppen):",200,150,largeFontSize);
                 SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
                 positionInput(11);
@@ -590,26 +555,15 @@ public class Application implements Runnable {
                         SaxionApp.drawBorderedText("De ruil wordt afgebroken.",250,230,mediumFontSize);
                         SaxionApp.pause();
                     } else {
-                        for (int i = 0; i < player2Properties.size(); i++) {
-                            if(i<15) {
-                                SaxionApp.drawBorderedText(i+1 + ". " + player2Properties.get(i).name,275,275+20*i,listFontSize);
-                            } else {
-                                SaxionApp.drawBorderedText(i+1 + ". " + player2Properties.get(i).name,525,275+20*(i-15),listFontSize);
-                            }
-                        }
+                        drawStreetList(player2Properties);
                         SaxionApp.drawBorderedText("Selecteer een bezit (0 om te stoppen):",200,150,largeFontSize);
                         positionInput(9);
                         int streetChoice2 = SaxionApp.readInt()-1;
                         while (streetChoice2 < -1 || streetChoice2 > player2Properties.size()-1) {
                             SaxionApp.clear();
                             drawMoneyPlayer();
-                            for (int i = 0; i < player2Properties.size(); i++) {
-                                if(i<15) {
-                                    SaxionApp.drawBorderedText(i+1 + ". " + player2Properties.get(i).name,275,275+20*i,listFontSize);
-                                } else {
-                                    SaxionApp.drawBorderedText(i+1 + ". " + player2Properties.get(i).name,525,275+20*(i-15),listFontSize);
-                                }
-                            }
+
+                            drawStreetList(player2Properties);
                             SaxionApp.drawBorderedText("Selecteer een bezit (0 om te stoppen):",200,150,largeFontSize);
                             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
                             positionInput(11);
@@ -708,26 +662,15 @@ public class Application implements Runnable {
             }
         }
         if(!ownedStreets.isEmpty()) {
-            for (int i = 0; i < ownedStreets.size(); i++) {
-                if (i < 15) {
-                    SaxionApp.drawBorderedText(i + 1 + ". " + ownedStreets.get(i).name, 275, 275 + 20 * i, listFontSize);
-                } else {
-                    SaxionApp.drawBorderedText(i + 1 + ". " + ownedStreets.get(i).name, 525, 275 + 20 * (i - 15), listFontSize);
-                }
-            }
+            drawStreetList(ownedStreets);
             SaxionApp.drawBorderedText("Selecteer de straat (0 om te stoppen):", 200, 150, largeFontSize);
             positionInput(9);
             int streetChoice = SaxionApp.readInt()-1;
             while (streetChoice < -1 || streetChoice > ownedStreets.size() - 1) {
                 SaxionApp.clear();
                 drawMoneyPlayer();
-                for (int i = 0; i < ownedStreets.size(); i++) {
-                    if (i < 15) {
-                        SaxionApp.drawBorderedText(i + 1 + ". " + ownedStreets.get(i).name, 275, 275 + 20 * i, listFontSize);
-                    } else {
-                        SaxionApp.drawBorderedText(i + 1 + ". " + ownedStreets.get(i).name, 525, 275 + 20 * (i - 15), listFontSize);
-                    }
-                }
+
+                drawStreetList(ownedStreets);
                 SaxionApp.drawBorderedText("Selecteer de straat (0 om te stoppen):", 200, 150, largeFontSize);
                 SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.", 250, 200, mediumFontSize);
                 positionInput(11);
@@ -763,26 +706,15 @@ public class Application implements Runnable {
                 mortgagedStreets.add(street);
             }
         }
-        for (int i = 0; i < mortgagedStreets.size(); i++) {
-            if(i<15) {
-                SaxionApp.drawBorderedText(i+1 + ". " + mortgagedStreets.get(i).name,275,275+20*i,listFontSize);
-            } else {
-                SaxionApp.drawBorderedText(i+1 + ". " + mortgagedStreets.get(i).name,525,275+20*(i-15),listFontSize);
-            }
-        }
+        drawStreetList(mortgagedStreets);
         SaxionApp.drawBorderedText("Selecteer de straat (0 om te stoppen):",200,150,largeFontSize);
         positionInput(9);
         int streetChoice = SaxionApp.readInt()-1;
         while (streetChoice < -1 || streetChoice > mortgagedStreets.size()-1) {
             SaxionApp.clear();
             drawMoneyPlayer();
-            for (int i = 0; i < mortgagedStreets.size(); i++) {
-                if(i<15) {
-                    SaxionApp.drawBorderedText(i+1 + ". " + mortgagedStreets.get(i).name,275,275+20*i,listFontSize);
-                } else {
-                    SaxionApp.drawBorderedText(i+1 + ". " + mortgagedStreets.get(i).name,525,275+20*(i-15),listFontSize);
-                }
-            }
+
+            drawStreetList(mortgagedStreets);
             SaxionApp.drawBorderedText("Selecteer de straat (0 om te stoppen):",200,150,largeFontSize);
             SaxionApp.drawBorderedText("Dit is geen optie. Probeer het opnieuw.",250,200,mediumFontSize);
             positionInput(11);
@@ -797,6 +729,28 @@ public class Application implements Runnable {
             drawMoneyPlayer();
             SaxionApp.drawBorderedText("Je hebt de bank " + (int)(resultStreet.mortgage*1.1) + " betaald.",325,250,mediumFontSize);
             SaxionApp.pause();
+        }
+    }
+
+    public void drawStreetList(ArrayList<Street> streetList) {
+        for (int i = 0; i < streetList.size(); i++) {
+            if (streetList.size() <= 15) {
+                SaxionApp.drawBorderedText(i + 1 + ". " + streetList.get(i).name, 400, 275 + 20 * i, listFontSize);
+            } else if (streetList.size() <= 30) {
+                if (i < 15) {
+                    SaxionApp.drawBorderedText(i + 1 + ". " + streetList.get(i).name, 275, 275 + 20 * i, listFontSize);
+                } else {
+                    SaxionApp.drawBorderedText(i + 1 + ". " + streetList.get(i).name, 500, 275 + 20 * (i - 15), listFontSize);
+                }
+            } else {
+                if (i < 15) {
+                    SaxionApp.drawBorderedText(i + 1 + ". " + streetList.get(i).name, 200, 275 + 20 * i, listFontSize);
+                } else if (i < 30) {
+                    SaxionApp.drawBorderedText(i + 1 + ". " + streetList.get(i).name, 350, 275 + 20 * (i - 15), listFontSize);
+                } else {
+                    SaxionApp.drawBorderedText(i + 1 + ". " + streetList.get(i).name, 700, 275 + 20 * (i - 30), listFontSize);
+                }
+            }
         }
     }
 
