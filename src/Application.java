@@ -1,3 +1,4 @@
+import Reader.Reader;
 import nl.saxion.app.CsvReader;
 import nl.saxion.app.SaxionApp;
 
@@ -190,10 +191,10 @@ public class Application implements Runnable {
     }
 
     public void initializeStreets() {
-        CsvReader readerStreets = new CsvReader("reguliere_straten.csv");
-        CsvReader readerLocations = new CsvReader("locaties.csv");
-        CsvReader readerStations = new CsvReader("stations.csv");
-        CsvReader readerTaxes = new CsvReader("kosten.csv");
+        Reader readerStreets = new Reader("/reguliere_straten.csv");
+        Reader readerLocations = new Reader("/locaties.csv");
+        Reader readerStations = new Reader("/stations.csv");
+        Reader readerTaxes = new Reader("/kosten.csv");
 
         readerStreets.skipRow();
         readerLocations.skipRow();
@@ -257,7 +258,7 @@ public class Application implements Runnable {
         streets.add(kansstraat);
     }
     public void initializeCards(){
-        CsvReader cardReader = new CsvReader("kaarten.csv");
+        Reader cardReader = new Reader("/kaarten.csv");
         cardReader.skipRow();
         cardReader.setSeparator(',');
         while(cardReader.loadRow()){
