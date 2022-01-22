@@ -1005,7 +1005,7 @@ public class Application implements Runnable {
                     SaxionApp.clear();
                     drawMoneyPlayer();
                     SaxionApp.drawBorderedText("Voer een geldig antwoord in (ja of nee): ",250,200,mediumFontSize);
-                    positionInput(12);
+                    positionInput(11);
                     stringInput = SaxionApp.readString();
                 }
                 if (stringInput.equalsIgnoreCase("ja")) {
@@ -1257,9 +1257,12 @@ public class Application implements Runnable {
         Player auctionActivePlayer = activePlayer;
         int highestBid = selectedStreet.value/2;
         int i = 0;
+        int bidCounter = 0;
         while (bidPlayers.size() > 1) {
             int bid = 1000000000;
             while (bid > auctionActivePlayer.accountBalance) {
+                SaxionApp.printLine(bidCounter);
+                SaxionApp.pause();
                 SaxionApp.clear();
                 drawMoneyPlayer();
                 SaxionApp.drawBorderedText("Veiling van " + selectedStreet.name,300,150,largeFontSize);
@@ -1293,6 +1296,7 @@ public class Application implements Runnable {
 
                 } else {
                     highestBid = bid;
+                    bidCounter++;
                 }
             }
             if (i + 1 < bidPlayers.size()) {
@@ -1303,7 +1307,21 @@ public class Application implements Runnable {
                 auctionActivePlayer = bidPlayers.get(0);
             }
         }
-        selectedStreet.owner = bidPlayers.get(0).playerID;
-        players.get(selectedStreet.owner-1).accountBalance=players.get(selectedStreet.owner-1).accountBalance-highestBid;
+        SaxionApp.clear();
+        drawMoneyPlayer();
+        SaxionApp.drawBorderedText(bidPlayers.get(0).playerName + ", wil je " + selectedStreet.name + " kopen voor " + highestBid + "? (ja of nee)",200,200,mediumFontSize);
+        positionInput(11);
+        String confirmationInput = SaxionApp.readString();
+        while(!confirmationInput.equalsIgnoreCase("ja") && !confirmationInput.equalsIgnoreCase("nee")) {
+            SaxionApp.clear();
+            drawMoneyPlayer();
+            SaxionApp.drawBorderedText("Voer een geldig antwoord in (ja of nee): ",250,200,mediumFontSize);
+            positionInput(11);
+            confirmationInput = SaxionApp.readString();
+        }
+        if(confirmationInput.equalsIgnoreCase("ja")) {
+            selectedStreet.owner = bidPlayers.get(0).playerID;
+            players.get(selectedStreet.owner-1).accountBalance=players.get(selectedStreet.owner-1).accountBalance-highestBid;
+        }
     }
 }
