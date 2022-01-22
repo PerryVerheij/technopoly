@@ -3,7 +3,9 @@ import nl.saxion.app.CsvReader;
 import nl.saxion.app.SaxionApp;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class Application implements Runnable {
@@ -107,7 +109,7 @@ public class Application implements Runnable {
                 } else {
                     auction();
                 }
-            } else if(selectedStreet.name.equalsIgnoreCase("ransomware")&&activePlayer.jail){
+            } else if(selectedStreet.name.equalsIgnoreCase("ransomware") && activePlayer.jail){
                 activePlayer.jailCount++;
                 SaxionApp.drawBorderedText("Wil je jezelf vrij kopen?",300,200,largeFontSize);
                 SaxionApp.drawBorderedText("1. Ja (-50)",300,250,mediumFontSize);
@@ -225,7 +227,6 @@ public class Application implements Runnable {
             newStreet.value = readerStations.getInt(1);
             newStreet.group = readerStations.getInt(2);
             newStreet.mortgage = readerStations.getInt(3);
-            newStreet.undeveloped = readerStations.getInt(4);
             streets.add(newStreet);
         }
         while(readerLocations.loadRow()) {
@@ -500,7 +501,22 @@ public class Application implements Runnable {
 
     public void payInterest(){
         int interestAmount = 0;
-        switch (selectedStreet.amountOfServers) {
+        String[] OSes = {"MacOS","Windows","Linux","Android"};
+        if(Arrays.asList(OSes).contains(selectedStreet.name)) {
+            int osOwner = selectedStreet.owner;
+            int ownedOSes = 0;
+            for(Street street : streets) {
+                if(Arrays.asList(OSes).contains(street.name) && street.owner == osOwner) {
+                    ownedOSes++;
+                }
+            }
+            switch (ownedOSes) {
+                case 1 -> interestAmount = 25;
+                case 2 -> interestAmount = 50;
+                case 3 -> interestAmount = 75;
+                case 4 -> interestAmount = 100;
+            }
+        } else switch(selectedStreet.amountOfServers) {
             case 0 -> {
                 interestAmount = selectedStreet.undeveloped;
                 if (selectedStreet.datacenterExistent) {
@@ -1251,7 +1267,7 @@ public class Application implements Runnable {
                 SaxionApp.drawBorderedText("Laatst geboden: " +  highestBid,350,230,mediumFontSize);
                 SaxionApp.drawBorderedText(auctionActivePlayer.playerName + ":",400,270,listFontSize);
 
-                positionInput(12);
+                positionInput(13);
                 bid = SaxionApp.readInt();
 
                 if (bid <= highestBid) {
