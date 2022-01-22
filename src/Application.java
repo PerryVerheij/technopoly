@@ -1261,8 +1261,6 @@ public class Application implements Runnable {
         while (bidPlayers.size() > 1) {
             int bid = 1000000000;
             while (bid > auctionActivePlayer.accountBalance) {
-                SaxionApp.printLine(bidCounter);
-                SaxionApp.pause();
                 SaxionApp.clear();
                 drawMoneyPlayer();
                 SaxionApp.drawBorderedText("Veiling van " + selectedStreet.name,300,150,largeFontSize);
