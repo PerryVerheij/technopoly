@@ -53,6 +53,7 @@ public class Application implements Runnable {
         while(!endGame) {
             //set variables
             nextTurn = false;
+            String[] excludedStreets = {"Cracklicentie","Ransomware","Naar ransomware!","Kans","Algemeen fonds","Start","Langs start gaan","Hardware-upgrade","Elektriciteitskosten"};
             //graphics
             SaxionApp.clear();
             drawMoneyPlayer();
@@ -148,7 +149,7 @@ public class Application implements Runnable {
                 activePlayer.jailCount = 0;
             } else if(selectedStreet.name.equalsIgnoreCase("start")){
                 activePlayer.accountBalance= activePlayer.accountBalance+200;
-            } else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID) {
+            } else if(!selectedStreet.mortgaged && selectedStreet.owner != activePlayer.playerID && !Arrays.asList(excludedStreets).contains(selectedStreet.name)) {
                 payInterest();
             }
             while(!nextTurn) {
@@ -252,7 +253,7 @@ public class Application implements Runnable {
         Street kansstraat = new Street();
         Street algStraat = new Street();
         kansstraat.name = "Kans";
-        algStraat.name = "Algemeen Fonds";
+        algStraat.name = "Algemeen fonds";
         algStraat.buyable = false;
         kansstraat.buyable = false;
         streets.add(algStraat);
