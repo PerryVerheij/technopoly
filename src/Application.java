@@ -33,6 +33,7 @@ public class Application implements Runnable {
         SaxionApp.turnBorderOff();
         initializeStreets();
         initializeCards();
+        String[] excludedStreets = {"Cracklicentie","Ransomware","Naar ransomware!","Kans","Algemeen fonds","Start","Langs start gaan","Hardware-upgrade","Elektriciteitskosten"};
         //choose player
         SaxionApp.drawBorderedText("Kies het aantal spelers (2-4):",250,200,largeFontSize);
         positionInput(11);
@@ -53,7 +54,6 @@ public class Application implements Runnable {
         while(!endGame) {
             //set variables
             nextTurn = false;
-            String[] excludedStreets = {"Cracklicentie","Ransomware","Naar ransomware!","Kans","Algemeen fonds","Start","Langs start gaan","Hardware-upgrade","Elektriciteitskosten"};
             //graphics
             SaxionApp.clear();
             drawMoneyPlayer();
