@@ -502,6 +502,7 @@ public class Application implements Runnable {
     public void payInterest(){
         int interestAmount = 0;
         String[] OSes = {"MacOS","Windows","Linux","Android"};
+        String[] locations = {"Brainport Eindhoven","Silicon Valley"};
         if(Arrays.asList(OSes).contains(selectedStreet.name)) {
             int osOwner = selectedStreet.owner;
             int ownedOSes = 0;
@@ -515,6 +516,18 @@ public class Application implements Runnable {
                 case 2 -> interestAmount = 50;
                 case 3 -> interestAmount = 75;
                 case 4 -> interestAmount = 100;
+            }
+        } else if(Arrays.asList(locations).contains(selectedStreet.name)) {
+            int locationOwner = selectedStreet.owner;
+            int ownedLocations = 0;
+            for(Street street : streets) {
+                if(Arrays.asList(locations).contains(street.name) && street.owner == locationOwner) {
+                    ownedLocations++;
+                }
+            }
+            switch (ownedLocations) {
+                case 1 -> interestAmount = 60;
+                case 2 -> interestAmount = 120;
             }
         } else switch(selectedStreet.amountOfServers) {
             case 0 -> {
@@ -532,6 +545,8 @@ public class Application implements Runnable {
         if (selectedStreet.owner!=0) {
             players.get(selectedStreet.owner - 1).accountBalance = players.get(selectedStreet.owner - 1).accountBalance + interestAmount;
         }
+        SaxionApp.drawBorderedText("Je hebt " + players.get(selectedStreet.owner-1).playerName + " " + interestAmount + " aan gebruikskosten betaald.",200,200,mediumFontSize);
+        SaxionApp.pause();
     }
 
     public void swapPropertiesBuildup() {
